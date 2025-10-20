@@ -1,0 +1,29 @@
+{
+  "name": "Markdoc",
+  "scope": "source.markdoc",
+  "grammar": "markdoc",
+  "file-extensions": ["mdoc", "markdoc"],
+  "first-line-match": null,
+  "injection-regex": "markdoc",
+  "comment": {
+    "block": ["<!--", "-->"]
+  },
+  "indent": {
+    "tab-width": 2,
+    "unit": "  "
+  },
+  "brackets": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"]
+  ],
+  "auto-close-before": ";:.,=}])`\"'",
+  "auto-pairs": {
+    "(": ")",
+    "{": "}",
+    "[": "]",
+    "\"": "\"",
+    "'": "'",
+    "`": "`"
+  }
+}
