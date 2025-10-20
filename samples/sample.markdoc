@@ -1,0 +1,40 @@
+# Markdoc Sample (.markdoc)
+
+This is a **Markdoc** document with _emphasis_ and `inline code`.
+
+## Features
+
+- Lists with **bold** and *italic*
+- Code blocks with syntax highlighting
+- Markdoc tags and variables
+
+```typescript
+interface User {
+  name: string;
+  role: 'admin' | 'user';
+}
+
+function greetUser(user: User) {
+  return `Hello, ${user.name}!`;
+}
+```
+
+### Markdoc Tags
+
+{% callout type="info" %}
+This is an info callout tag.
+{% /callout %}
+
+{% note title="Important Note" %}
+Markdoc supports custom tags for rich content.
+{% /note %}
+
+### Variables and Expressions
+
+Welcome: {{ $user.name }}
+Current date: {{ $date }}
+Is admin: {{ $user.role === 'admin' }}
+
+> This is a blockquote with **bold** text.
+
+[Link to Markdoc docs](https://markdoc.dev)
