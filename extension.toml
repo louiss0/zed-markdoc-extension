@@ -16,4 +16,4 @@ path = "languages/markdoc.json"
 [[grammars]]
 name = "markdoc"
 symbol_name = "tree_sitter_markdoc"
-source = { git = "https://github.com/louiss0/tree-sitter-markdoc", rev = "ca296e9db560ccc027a207baaee57286909c4526" }
+source = { git = "https://github.com/louiss0/tree-sitter-markdoc", branch = "master" }
