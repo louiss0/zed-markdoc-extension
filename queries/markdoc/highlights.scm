@@ -1,44 +1,85 @@
+; Frontmatter
+(frontmatter) @markup.raw.block
+(yaml) @markup.raw.block
+
 ; Headings
-(atx_heading (atx_h1_marker) @markup.heading.marker)
-(atx_heading (atx_h2_marker) @markup.heading.marker)
-(atx_heading (atx_h3_marker) @markup.heading.marker)
-(atx_heading (atx_h4_marker) @markup.heading.marker)
-(atx_heading (atx_h5_marker) @markup.heading.marker)
-(atx_heading (atx_h6_marker) @markup.heading.marker)
-(atx_heading (heading_content) @markup.heading)
+(heading) @markup.heading
+(heading_marker) @markup.heading.marker
+(heading_text) @markup.heading
 
-; Emphasis and Strong
-(emphasis) @markup.italic
-(strong_emphasis) @markup.bold
+; Code blocks
+(fenced_code_block) @markup.raw.block
+(code_fence_open) @punctuation.delimiter
+(code_fence_close) @punctuation.delimiter
+(code) @markup.raw.block
+(info_string) @attribute
+(language) @attribute
+(attributes) @attribute
 
-; Code
-(code_span) @markup.raw.inline
-(fenced_code_block (info_string) @attribute)
-(fenced_code_block (code_fence_content) @markup.raw.block)
+; Markdoc tags
+(markdoc_tag) @markup.raw.block
+(tag_open) @punctuation.delimiter
+(tag_close) @punctuation.delimiter
+(tag_self_close) @punctuation.delimiter
+(tag_name) @function.call
 
-; Links and Images
-(link (link_text) @markup.link.text)
-(link (link_destination) @markup.link.url)
-(image (link_text) @markup.link.text)
-(image (link_destination) @markup.link.url)
-
-; Lists
-(list_marker_dot) @punctuation.special
-(list_marker_minus) @punctuation.special
-(list_marker_plus) @punctuation.special
-(list_marker_star) @punctuation.special
-
-; Blockquote
-(block_quote_marker) @punctuation.special
-(block_quote) @markup.quote
-
-; Markdoc-specific (adjust based on actual grammar node names)
-(tag_open) @keyword
-(tag_close) @keyword
-(tag_name) @tag
+; Tag attributes
+(attribute) @variable
 (attribute_name) @property
 (attribute_value) @string
-(variable) @variable
+
+; Expressions and variables
+(inline_expression) @markup.raw.inline
+(expression) @variable
+(call_expression) @function.call
+(member_expression) @variable.member
+(array_access) @variable.member
+(array_literal) @punctuation.bracket
+(object_literal) @punctuation.bracket
+(identifier) @variable
+(number) @constant.numeric
+(string) @string
+(arguments) @punctuation.bracket
+
+; Text formatting
+(emphasis) @markup.italic
+(strong) @markup.bold
+(inline_code) @markup.raw.inline
+
+; Links and Images
+(link) @markup.link
+(link_text) @markup.link.text
+(link_destination) @markup.link.url
+(image) @markup.link
+(image_alt) @markup.link.text
+(image_destination) @markup.link.url
+
+; Lists
+(list) @markup.list
+(list_item) @markup.list.item
+(list_marker) @punctuation.special
 
 ; HTML
-(html_tag) @tag
+(html_comment) @comment
+(html_block) @markup.raw.block
+(html_inline) @markup.raw.inline
+
+; Text
+(text) @text
+
+; Punctuation
+"{{" @punctuation.delimiter
+"}}" @punctuation.delimiter
+"{%" @punctuation.delimiter
+"%}" @punctuation.delimiter
+"/%}" @punctuation.delimiter
+"[" @punctuation.bracket
+"]" @punctuation.bracket
+"(" @punctuation.bracket
+")" @punctuation.bracket
+"{" @punctuation.bracket
+"}" @punctuation.bracket
+"=" @operator
+"." @operator
+"," @punctuation.delimiter
+":" @punctuation.delimiter
