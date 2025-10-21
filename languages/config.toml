@@ -1,0 +1,4 @@
+name = "Markdoc"
+grammar = "markdoc"
+path_suffixes = ["mdoc", "markdoc"]
+line_comments = ["<!-- ", "-->"]
