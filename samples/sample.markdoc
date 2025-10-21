@@ -47,8 +47,8 @@ Is admin: {{ $user.role === 'admin' }}
 [Link to Markdoc docs](https://markdoc.dev)
 
 
-* ok
- - Bar
++ ok
++ Bar
 
 * Baz
 - Boo
