@@ -23,10 +23,9 @@
 (attributes) @attribute
 
 ; Lists
+(list_item
+  marker: (_ ) @punctuation.list_marker)
 (list) @text
-(list_item) @text
-(list_marker) @punctuation.list_marker
-(list_paragraph) @text
 
 ; Markdoc tags
 (tag_name) @tag
