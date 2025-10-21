@@ -5,8 +5,9 @@ schema_version = 1
 description = "Markdoc language support: syntax highlighting, file associations, and editor integration using tree-sitter-markdoc."
 repository = "https://github.com/louiss0/zed-markdoc-extension"
 license = "MIT"
-authors = ["Shelton Louis"]
+authors = ["Louis"]
+categories = ["Language"]
 
 [grammars.markdoc]
 repository = "https://github.com/louiss0/tree-sitter-markdoc"
-rev = "ca296e9db560ccc027a207baaee57286909c4526"
+rev = "c31c634eac3c6abe17d58dcb8cac36bfa68d1745"
