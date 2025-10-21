@@ -1,5 +1,9 @@
 # Zed Markdoc Extension
 
+[![Release](https://img.shields.io/github/v/release/louiss0/zed-markdoc-extension?include_prereleases)](https://github.com/louiss0/zed-markdoc-extension/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/louiss0/zed-markdoc-extension)
+
 Comprehensive [Markdoc](https://markdoc.dev) language support for the [Zed editor](https://zed.dev).
 
 ## Features
@@ -12,6 +16,10 @@ Comprehensive [Markdoc](https://markdoc.dev) language support for the [Zed edito
 
 ## Installation
 
+### Latest Release
+
+The latest version is **v0.1.0** - Initial Release. See [releases page](https://github.com/louiss0/zed-markdoc-extension/releases) for all versions.
+
 ### From Zed Extensions (Coming Soon)
 
 Once published to the Zed extension registry:
@@ -20,13 +28,18 @@ Once published to the Zed extension registry:
 3. Search for "Markdoc"
 4. Click Install
 
-### Development Installation
+### Manual Installation
 
-1. Clone this repository
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/louiss0/zed-markdoc-extension.git
+   ```
+
 2. Symlink or copy to Zed's dev extensions directory:
-   - **Linux**: `~/.config/zed/extensions/dev/markdoc`
-   - **macOS**: `~/Library/Application Support/Zed/extensions/dev/markdoc`
-   - **Windows**: `%APPDATA%/Zed/extensions/dev/markdoc`
+   - **Linux**: `ln -s /path/to/zed-markdoc-extension ~/.config/zed/extensions/dev/markdoc`
+   - **macOS**: `ln -s /path/to/zed-markdoc-extension ~/Library/Application\ Support/Zed/extensions/dev/markdoc`
+   - **Windows**: `mklink /D "%APPDATA%\Zed\extensions\dev\markdoc" "C:\path\to\zed-markdoc-extension"`
+
 3. Restart Zed
 
 ## File Associations
