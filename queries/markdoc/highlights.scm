@@ -1,68 +1,60 @@
 ; Frontmatter
-(frontmatter) @markup.raw.block
-(yaml) @markup.raw.block
+(frontmatter) @text.literal
+(yaml) @text.literal
 
 ; Headings
-(heading) @markup.heading
-(heading_marker) @markup.heading.marker
-(heading_text) @markup.heading
+(heading_text) @title
+(heading_marker) @punctuation.special
 
 ; Code blocks
-(fenced_code_block) @markup.raw.block
+(fenced_code_block) @text.literal
 (code_fence_open) @punctuation.delimiter
 (code_fence_close) @punctuation.delimiter
-(code) @markup.raw.block
+(code) @text.literal
 (info_string) @attribute
 (language) @attribute
 (attributes) @attribute
 
 ; Markdoc tags
-(markdoc_tag) @markup.raw.block
 (tag_open) @punctuation.delimiter
 (tag_close) @punctuation.delimiter
 (tag_self_close) @punctuation.delimiter
-(tag_name) @function.call
+(tag_name) @tag
 
 ; Tag attributes
-(attribute) @variable
 (attribute_name) @property
 (attribute_value) @string
 
 ; Expressions and variables
-(inline_expression) @markup.raw.inline
-(expression) @variable
-(call_expression) @function.call
-(member_expression) @variable.member
-(array_access) @variable.member
+(inline_expression) @embedded
+(identifier) @variable
+(number) @number
+(string) @string
+(call_expression) @function
+(member_expression) @variable
+(array_access) @variable
 (array_literal) @punctuation.bracket
 (object_literal) @punctuation.bracket
-(identifier) @variable
-(number) @constant.numeric
-(string) @string
 (arguments) @punctuation.bracket
 
 ; Text formatting
-(emphasis) @markup.italic
-(strong) @markup.bold
-(inline_code) @markup.raw.inline
+(emphasis) @emphasis
+(strong) @emphasis.strong
+(inline_code) @string.special
 
 ; Links and Images
-(link) @markup.link
-(link_text) @markup.link.text
-(link_destination) @markup.link.url
-(image) @markup.link
-(image_alt) @markup.link.text
-(image_destination) @markup.link.url
+(link_text) @link_text
+(link_destination) @link_uri
+(image_alt) @link_text
+(image_destination) @link_uri
 
 ; Lists
-(list) @markup.list
-(list_item) @markup.list.item
-(list_marker) @punctuation.special
+(list_marker) @punctuation.list_marker
 
 ; HTML
 (html_comment) @comment
-(html_block) @markup.raw.block
-(html_inline) @markup.raw.inline
+(html_block) @embedded
+(html_inline) @embedded
 
 ; Text
 (text) @text
