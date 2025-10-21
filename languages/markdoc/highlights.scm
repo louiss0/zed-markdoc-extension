@@ -23,8 +23,8 @@
 (attributes) @attribute
 
 ; Lists
-(list_item
-  marker: (_ ) @punctuation.list_marker)
+(list_marker) @punctuation.list_marker
+(list_paragraph) @text
 (list) @text
 
 ; Markdoc tags
