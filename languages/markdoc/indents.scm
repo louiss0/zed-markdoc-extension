@@ -9,3 +9,9 @@
 
 ; Indent inside HTML blocks
 (html_block) @indent
+
+; Indent inside blockquotes
+(blockquote) @indent
+
+; Indent inside Markdoc tables
+(markdoc_table) @indent

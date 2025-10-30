@@ -15,3 +15,13 @@
 
 ; Fold frontmatter
 (frontmatter) @fold
+
+; Fold comments
+(comment_block) @fold
+
+; Fold blockquotes
+(blockquote) @fold
+
+; Fold tables
+(markdown_table) @fold
+(markdoc_table) @fold
