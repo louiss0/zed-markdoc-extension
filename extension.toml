@@ -10,4 +10,4 @@ categories = ["Language"]
 
 [grammars.markdoc]
 repository = "https://github.com/louiss0/tree-sitter-markdoc"
-rev = "c31c634eac3c6abe17d58dcb8cac36bfa68d1745"
+rev = "e338c0e49caa658f0c1049eba7ee9cf630573981"
