@@ -1,0 +1,45 @@
+---
+title: Getting Started with Markdoc
+description: A quickstart guide for using Markdoc in your projects.
+---
+
+# Getting Started
+
+Markdoc combines Markdown simplicity with component power.
+
+## Installation
+
+```bash
+npm install @markdoc/markdoc
+```
+
+## Basic Usage
+
+```js
+import Markdoc from '@markdoc/markdoc';
+const ast = Markdoc.parse(markdown);
+const content = Markdoc.transform(ast);
+```
+
+{% callout type="info" %}
+Markdoc transforms Markdown-like syntax into structured, renderable ASTs.
+{% /callout %}
+
+## Using Tags
+
+You can define custom tags in your configuration:
+
+```js
+const schema = {
+  tags: {
+    callout: {
+      render: 'Callout',
+      attributes: {
+        type: { type: String, default: 'note' }
+      }
+    }
+  }
+};
+```
+
+{% link href="https://markdoc.dev/docs" %}Learn more in the official docs{% /link %}

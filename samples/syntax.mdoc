@@ -1,0 +1,87 @@
+---
+title: Markdoc Syntax Reference
+description: Comprehensive guide to Markdoc syntax and features.
+---
+
+# Markdoc Syntax Reference
+
+Markdoc is a powerful, extensible syntax for writing content that compiles to HTML using a schema-based approach.
+
+## Frontmatter
+
+Use frontmatter to define metadata at the top of your file.
+
+```yaml
+---
+title: Getting Started
+description: Learn the basics of Markdoc.
+---
+```
+
+## Headings
+
+Headings are written using Markdown-style `#` syntax.
+
+```markdown
+# Heading 1
+## Heading 2
+### Heading 3
+```
+
+{% callout type="info" %}
+Headings can be referenced automatically when rendering a table of contents.
+{% /callout %}
+
+## Variables
+
+Variables can be used for templating dynamic content.
+
+```markdown
+Hello {{ name }}!
+```
+
+Pass variables through your rendering context in JavaScript.
+
+```js
+markdoc.transform(ast, { variables: { name: "Shelton" } });
+```
+
+## Tags
+
+Tags allow structured components within documents.
+
+```markdown
+{% callout type="warning" %}
+Handle with care.
+{% /callout %}
+```
+
+| Tag | Description |
+| --- | --- |
+| `{% callout %}` | Creates styled alert boxes. |
+| `{% code %}` | Renders formatted code examples. |
+| `{% include %}` | Includes external Markdoc files. |
+
+
+
+## Foo
+
+## Expressions
+
+Markdoc supports conditional logic and iteration.
+
+```markdown
+{% if user %}
+Welcome back, {{ user.name }}!
+{% else %}
+Please log in.
+{% /if %}
+```
+
+{% code lang="js" %}
+if (user) console.log("Welcome back!");
+{% /code %}
+
+## Functions
+
+{% titleCase() %}

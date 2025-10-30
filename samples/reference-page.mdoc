@@ -1,0 +1,18 @@
+---
+title: Markdoc Reference Sheet
+description: Quick reference for Markdoc tags, syntax, and usage.
+---
+
+# Markdoc Reference
+
+| Feature | Syntax | Example |
+| --- | --- | --- |
+| Heading | `#` | `# Title` |
+| Callout | `{% callout %}` | `{% callout type="info" %}...{% /callout %}` |
+| Code | `{% code %}` | `{% code lang="js" %}console.log('hi'){% /code %}` |
+| Variables | `{{ variable }}` | `{{ name }}` |
+| Conditionals | `{% if %}` | `{% if loggedIn %}Welcome{% /if %}` |
+
+{% callout type="success" %}
+Markdoc keeps your content declarative, composable, and clean.
+{% /callout %}
