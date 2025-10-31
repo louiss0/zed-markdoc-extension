@@ -24,3 +24,11 @@
 ; Inject expressions used as attribute values in tags
 ((attribute_value (expression) @injection.content)
  (#set! injection.language "javascript"))
+
+; Inject JavaScript expressions in if tag conditions
+((if_tag_open condition: (expression) @injection.content)
+ (#set! injection.language "javascript"))
+
+; Inject JavaScript expressions in else tag conditions
+((else_tag condition: (expression) @injection.content)
+ (#set! injection.language "javascript"))

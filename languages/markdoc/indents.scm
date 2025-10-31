@@ -7,6 +7,9 @@
 ; Indent inside Markdoc tags
 (markdoc_tag) @indent
 
+; Indent inside if/else conditional tags
+(if_tag) @indent
+
 ; Indent inside HTML blocks
 (html_block) @indent
 

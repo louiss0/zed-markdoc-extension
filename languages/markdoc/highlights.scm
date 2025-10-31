@@ -30,10 +30,6 @@
 ; THEMATIC BREAKS (HORIZONTAL RULES)
 ; ============================================================================
 
-; Thematic break as table row separator inside markdoc_table
-(markdoc_table (thematic_break) @markup.table.separator)
-
-; Generic thematic break (horizontal rule)
 (thematic_break) @punctuation.special
 
 ; ============================================================================
@@ -74,17 +70,13 @@
 (list (list_item (list_marker) @markup.list.numbered)
   (#match? @markup.list.numbered "^[0-9]+\.[ \t]+$"))
 
-; List markers used as table cell markers inside markdoc_table
-; Note: Grammar uses list_marker for table cells but semantically they're cells
-(markdoc_table (list_marker) @markup.list.table_cell)
-
-; List item annotations: {% type %} after list content
+; List item annotations: {% type %}
 (list_item_annotation
   "{%" @punctuation.bracket
   "%}" @punctuation.bracket)
+(list_item_annotation type: (annotation_type) @attribute)
+(list_item_annotation (attribute) @attribute)
 
-; Annotation type name (e.g., important, warning, note)
-(annotation_type) @tag.attribute
 
 ; ============================================================================
 ; INLINE FORMATTING
@@ -155,6 +147,35 @@
 (markdown_table_row (markdown_table_cell) @none)
 
 ; ============================================================================
+; MARKDOC TABLES
+; ============================================================================
+
+; Markdoc table open/close tags
+(markdoc_table_open
+  "{%" @punctuation.bracket
+  "%}" @punctuation.bracket)
+(markdoc_table_close
+  "{%" @punctuation.bracket
+  "%}" @punctuation.bracket)
+
+; Markdoc table separators (---)
+(markdoc_table_separator) @punctuation.special
+
+; Markdoc table cell list markers
+(markdoc_table_cell marker: (list_marker) @markup.list)
+
+; Markdoc table header cells - emphasize like markdown table headers
+(markdoc_table_header (markdoc_table_cell) @markup.bold)
+
+; Markdoc table cell annotations: {% colspan=2 %}
+(markdoc_table_cell_annotation
+  "{%" @punctuation.bracket
+  "%}" @punctuation.bracket)
+(markdoc_table_cell_annotation (annotation_name) @attribute)
+(markdoc_table_cell_annotation (annotation_value) @number)
+(markdoc_table_cell_annotation "=" @operator)
+
+; ============================================================================
 ; MARKDOC TAGS
 ; ============================================================================
 
@@ -185,6 +206,19 @@
 
 ; Comment blocks: {% comment %}...{% /comment %}
 (comment_block) @comment
+
+; ============================================================================
+; IF/ELSE CONDITIONAL TAGS
+; ============================================================================
+
+; If tag keywords
+(if_tag_open "if" @keyword.control.conditional)
+(if_tag_close "if" @keyword.control.conditional)
+(else_tag "else" @keyword.control.conditional)
+
+; If tag condition
+(if_tag_open condition: (expression) @embedded)
+(else_tag condition: (expression) @embedded)
 
 
 

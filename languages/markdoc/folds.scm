@@ -7,6 +7,9 @@
 ; Fold Markdoc tags
 (markdoc_tag) @fold
 
+; Fold if/else conditional tags
+(if_tag) @fold
+
 ; Fold lists
 (list) @fold
 
