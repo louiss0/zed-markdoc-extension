@@ -4,17 +4,16 @@ author: Mark Syntax
 date: 2025-10-29
 ---
 
-# Why I Switched to Markdoc
 
-Writing docs shouldn’t feel like fighting your syntax.
+Writing docs shouldn't feel like fighting your syntax. For years I kept duct-taping Markdown plugins together to handle variables, shared layouts, and conditional content, and every hack made the docs a little harder to maintain.
 
 {% callout type="note" %}
-Markdoc supports variables, tags, and reusable layouts — all while staying readable.
+Markdoc supports variables, tags,  and reusable layouts while staying readable.
 {% /callout %}
 
 ## Cleaner Writing
 
-Markdown is great, but when you need reusable layouts, **Markdoc** scales better.
+Markdown is great, but when you need reusable layouts, **Markdoc** scales better. Once my docs grew past a handful of pages, I needed a system that let me reuse components, keep content in sync, and keep authoring approachable for the rest of the team.
 
 {% code lang="markdown" %}
 {% callout type="info" %}
@@ -22,9 +21,45 @@ Documentation is better when it's composable.
 {% /callout %}
 {% /code %}
 
-- Foo
-  - Bar
-- Bar
+- Built in components stay readable in plain text.
+- Writers can work in Markdown and still rely on dynamic data.
+- Reviewers understand intent because the structure is explicit.
 
-1. Foo
-2. Bar
+## Structured Content Without Plugins
+
+Most static site tools forced us to install brittle plugins to support advanced layouts. Markdoc gives us syntactic sugar via tags and conditional logic without sacrificing clarity, so the authoring experience stays predictable.
+
+{% callout type="warning" %}
+Before migrating, audit custom Markdown extensions. Many of them map cleanly to Markdoc tags or partials.
+{% /callout %}
+
+> "Docs should empower, not intimidate." That mantra shaped our migration plan and guided which features we shipped first.
+
+### What Migration Looked Like
+
+1. Inventory Markdown shortcodes and custom components.
+2. Convert repeated patterns into Markdoc tags with shared partials.
+3. Publish a style guide so contributors know when to reach for tags versus raw Markdown.
+4. Add automated previews to catch visual or structural regressions early.
+
+### Dynamic Content Example
+
+{% if plan == "pro" %}
+Your team unlocks advanced analytics, custom themes, and priority support.
+{% else %}
+Ready to upgrade? Switch to the Pro plan for advanced analytics.
+{% /if %}
+
+The inline expressions above compile to plain JSON data at build time, so runtime performance stays sharp and rendering stays predictable.
+
+## Quick Reference
+
+- **Components:** Markdoc treats tags and partials as first-class citizens, so you can define reusable blocks without JavaScript glue.
+- **Conditional Text:** Control visibility with familiar `{% if %}` syntax rather than brittle HTML comments.
+- **Deployment:** Static builds stay pure Markdown + data, which keeps edge deploys fast and cache-friendly.
+
+## Further Reading
+
+- Read the official Markdoc concepts guide to understand tags, nodes, and layouts.
+- Pair the extension with Zed's live preview so writers can spot rendering issues.
+- Check in sample components regularly; they double as regression tests whenever the grammar changes.

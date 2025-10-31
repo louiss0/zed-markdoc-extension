@@ -1,5 +1,5 @@
 <!-- This .md file is NOT associated by default -->
-<!-- Users must opt-in via Zed settings to use Markdoc for .md files -->
+ <!--Users must opt-in via Zed settings to use Markdoc for .md files -->
 
 # Markdoc in .md file
 
