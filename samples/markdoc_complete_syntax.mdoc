@@ -1,0 +1,608 @@
+---
+title: Markdoc Complete Syntax Reference
+description: Exhaustive single-file reference covering Markdoc frontmatter, nodes, tags, attributes, annotations, variables, functions, expressions, schema, custom tags, includes, transforms, and integration examples.
+---
+
+# Markdoc — Complete Syntax Reference
+
+This file aims to be a single, comprehensive `.mdoc` reference covering the major features and patterns you will use when authoring Markdoc content and building schemas/components around it.
+
+> Note: Markdoc evolves — this file captures syntax and patterns commonly used and supported by the Markdoc project as of this writing. For the definitive source on behaviour and API, check the Markdoc repo and docs.
+
+---
+
+## Table of Contents
+
+1. Frontmatter (YAML)
+2. Core Markdown nodes
+3. Code fences and highlighting
+4. Comments
+5. Tags — basic syntax
+6. Self-closing tags
+7. Inline tags
+8. Tag attributes (types & examples)
+9. Annotations on nodes
+10. Variables and context
+11. Expressions & functions
+12. Conditionals (`if` / `elseif` / `else`)
+13. Iteration (`for` / `each` patterns)
+14. Includes & partials
+15. Importing data (JSON/YAML) and assets
+16. Schema: tags, attributes, and functions (JS examples)
+17. Custom functions (how to register)
+18. Rendering pipeline (parse → transform → render)
+19. Using Markdoc with frameworks (React/Next)
+20. Examples: full pages
+21. Advanced: AST, node transforms, plugins
+22. Security & best practices
+23. Troubleshooting & gotchas
+24. Quick reference appendix
+
+---
+
+## 1. Frontmatter (YAML)
+
+Frontmatter appears at the top of the file between `---` markers. It's parsed as YAML and becomes `markdoc.frontmatter`.
+
+```yaml
+---
+title: "My Fancy Page"
+description: "One-line summary."
+layout: "docs"
+tags:
+  - tutorial
+  - markdoc
+published: true
+date: 2025-10-29
+authors:
+  - name: "Shelton"
+    twitter: "@shelton"
+version: 1.2
+---
+```
+
+Access in content via variables or functions: e.g. `$markdoc.frontmatter.title` or `{{ markdoc.frontmatter.title }}` depending on render method.
+
+---
+
+## 2. Core Markdown nodes
+
+Standard Markdown nodes are supported (CommonMark).
+
+Examples:
+
+```markdown
+# H1
+## H2
+### H3
+
+Paragraph text with **bold**, *italic*, and `inline code`.
+
+- Unordered list
+  - nested item
+1. Ordered list
+
+> Block quote
+
+![Alt text](/assets/image.png "Optional title")
+[Link text](https://example.com)
+```
+
+Markdoc preserves these nodes in the AST and allows annotations and tags to be mixed in.
+
+---
+
+## 3. Code fences and highlighting
+
+Use fenced code blocks with language identifiers.
+
+```js
+console.log("Hello Markdoc");
+```
+
+You can also use the `{% code %}` tag (if present in your schema) to add extra rendering options.
+
+```markdoc
+{% code lang="js" filename="example.js" lineNumbers=true %}
+console.log("hello");
+{% /code %}
+```
+
+---
+
+## 4. Comments
+
+HTML-style comments are supported. They are removed during render (when `allowComments` is true).
+
+```markdown
+<!-- This comment will not appear in the rendered output -->
+```
+
+---
+
+## 5. Tags — basic syntax
+
+Tags are Markdoc’s structured components. Use `{% tagName attr="value" %}` for an opening tag and `{% /tagName %}` to close.
+
+```markdoc
+{% callout type="info" %}
+This is an informational callout.
+{% /callout %}
+```
+
+Tags can contain Markdown and nested tags.
+
+---
+
+## 6. Self-closing tags
+
+If a tag doesn’t need a body, use the self-closing syntax `/%}`.
+
+```markdoc
+{% toc /%}
+{% include src="./partials/sidebar.mdoc" /%}
+```
+
+---
+
+## 7. Inline tags
+
+Tags can be used inline within paragraphs for small components.
+
+Example: embedding a badge or an inline code helper.
+
+```markdoc
+Use the {% badge text="beta" /%} release for testing.
+```
+
+Be aware: inline tags must render to inline elements (span-like) in your component implementation.
+
+---
+
+## 8. Tag attributes (types & examples)
+
+Attributes can be strings, numbers, booleans, arrays, objects, variables, or expressions.
+
+Examples:
+
+```markdoc
+{% widget
+  name="weather"
+  version=3
+  enabled=true
+  coords=[37.7749, -122.4194]
+  meta={ id: "w-123", source: "api" }
+  tags=["weather","api"]
+  primaryColor=$theme.primary
+%}
+```
+
+- Strings — quoted or unquoted when simple: `name="x"` or `title=hello` (best to quote).
+- Numbers — `count=5`
+- Booleans — `visible=true`
+- Arrays — `[1, 2, "three"]`
+- Objects — `{ key: "value", n: 5 }`
+- Variables — `$markdoc.frontmatter.title` or `$user.id`
+- Expressions — `join(["a","b"], ", ")`
+
+### Attribute precedence and evaluation
+
+Attributes are evaluated at transform/render time. If they reference variables or functions, those must be present in the transform context or functions registry.
+
+---
+
+## 9. Annotations on nodes
+
+Annotations let you attach attributes to native nodes (like headings, lists, table rows).
+
+```markdown
+# My Heading {% id="my-heading" %}
+- Item 1 {% class="muted" %}
+```
+
+Annotations are written following the node content and apply to that node. They are especially useful for controlling layout (e.g., column widths for table cells).
+
+Example for tables:
+
+```markdoc
+{% table %}
+| Name | Description |
+| --- | --- |
+| Alpha {% width="25%" %} | Short desc |
+| Beta | Longer description {% colspan=2 %}
+{% /table %}
+```
+
+---
+
+## 10. Variables and context
+
+Markdoc supports variables accessible via `$` or templating in your render layer.
+
+**Frontmatter variables:** `$markdoc.frontmatter.<key>`
+
+**Custom variables:** you pass them through the transform/render call.
+
+Example usage inside content:
+
+```markdoc
+Hello, {% $user.name %}!
+Current version: {% $markdoc.frontmatter.version %}
+```
+
+Or using mustache-like interpolation (depending on renderer):
+
+```markdown
+{{ user.name }}
+```
+
+---
+
+## 11. Expressions & functions
+
+Markdoc allows functions to be executed in expressions. Common functions include `titleCase`, `if`, `equals`, `join`, `map`, `filter`, etc., depending on your registered function set.
+
+Examples:
+
+```markdoc
+{% titleCase($markdoc.frontmatter.title) %}
+
+{% if equals($user.role, "admin") %}
+Welcome, admin!
+{% else equals($user.role, "guest") /%}
+Welcome guest!
+{% else /%}
+Please sign in.
+{% /if %}
+```
+
+You can pass expressions as attributes:
+
+```markdoc
+{% card title=titleCase($markdoc.frontmatter.title) show=equals($user.role,"admin") %}
+Content...
+{% /card %}
+```
+
+---
+
+## 12. Conditionals (`if` / `elseif` / `else`)
+
+Markdoc supports conditional tags in the schema if you register them (many projects provide an `if` tag by default).
+
+```markdoc
+{% if $user %}
+Hello, {{ $user.name }}!
+
+{% else equals($role, "guest") /%}
+
+Welcome guest!
+
+{% else /%}
+Please sign in.
+{% /if %}
+```
+
+`elseif` may appear as `elsif` or be implemented as nested `if` depending on your function/tag definitions.
+
+---
+
+## 13. Iteration (`for` / `each` patterns)
+
+Markdoc lacks a built-in `for` tag in the core, but you can implement iteration via functions or custom tags. Example pattern with a custom `each` tag:
+
+```markdoc
+{% each items as item %}
+- {% item.name %}: {% item.value %}
+{% /each %}
+```
+
+Alternatively, use `map` functions in expressions:
+
+```markdoc
+{% forEach($items, (i) => `{% bullet %}${i.name}{% /bullet %}`) %}
+```
+
+(Implementation details depend on how you register functions and whether your renderer supports dynamic HTML string injection — prefer custom tags that accept arrays.)
+
+---
+
+## 14. Includes & partials
+
+Include external Markdoc files or snippets.
+
+```markdoc
+{% include src="./partials/intro.mdoc" /%}
+```
+
+`include` can be implemented to read files at build time and inject the parsed AST into the current document. This is ideal for reusing common sections (e.g., contributor guides, TOC, disclaimers).
+
+---
+
+## 15. Importing data (JSON/YAML) and assets
+
+You can import JSON or YAML into the rendering context ahead of transform:
+
+Example JS build step:
+
+```js
+import fs from 'fs';
+const data = JSON.parse(fs.readFileSync('./data/versions.json', 'utf8'));
+const ast = Markdoc.parse(markdown);
+const content = Markdoc.transform(ast, { variables: { releases: data } });
+```
+
+Then in Markdoc:
+
+```markdoc
+{% each $releases as r %}
+- {{ r.version }} — {{ r.date }}
+{% /each %}
+```
+
+---
+
+## 16. Schema: tags, attributes, and functions (JS examples)
+
+Define a tag in your Markdoc schema to tell Markdoc how to transform it and validate attributes.
+
+```js
+// schema.js
+export const schema = {
+  tags: {
+    callout: {
+      render: 'Callout', // React/JSX component name or a string renderer
+      attributes: {
+        type: { type: String },
+        icon: { type: String },
+        collapsible: { type: Boolean, default: false },
+      },
+      children: ['paragraph', 'list', 'tag'] // allowed children types
+    },
+    code: {
+      render: 'CodeBlock',
+      attributes: {
+        lang: { type: String },
+        filename: { type: String },
+        lineNumbers: { type: Boolean, default: false }
+      }
+    }
+  },
+  functions: {
+    titleCase: (value) => {/* implement */},
+    equals: (a,b) => a === b
+  }
+};
+```
+
+`render` can point to a component name (for frameworks) or a function that returns HTML.
+
+---
+
+## 17. Custom functions (how to register)
+
+Functions are registered in the `functions` key of the schema or passed into `transform`.
+
+```js
+const functions = {
+  titleCase: (s) => s.replace(/\w\S*/g, (t) => t.charAt(0).toUpperCase() + t.slice(1)),
+  join: (arr, sep) => arr.join(sep),
+  equals: (a, b) => a === b,
+  formatDate: (d, fmt) => /* format logic */
+};
+
+const transformed = Markdoc.transform(ast, { functions, variables: { user } });
+```
+
+Call in Markdoc:
+
+```markdoc
+{% formatDate($markdoc.frontmatter.date, "YYYY-MM-DD") %}
+```
+
+---
+
+## 18. Rendering pipeline (parse → transform → render)
+
+Typical flow:
+
+1. `Markdoc.parse(markdown)` → AST
+2. `Markdoc.transform(ast, { schema, variables, functions })` → transformed AST or JSON tree ready for rendering
+3. `Markdoc.renderers.react(transformed, React.createElement)` → React elements (example) OR produce HTML via custom renderer.
+
+Example:
+
+```js
+import Markdoc from '@markdoc/markdoc';
+import ReactDOMServer from 'react-dom/server';
+import MyComponents from './components';
+
+const ast = Markdoc.parse(markdown);
+const transformed = Markdoc.transform(ast, { schema, variables, functions });
+const content = Markdoc.renderers.react(transformed, React.createElement, { components: MyComponents });
+const html = ReactDOMServer.renderToString(content);
+```
+
+---
+
+## 19. Using Markdoc with frameworks (React / Next.js)
+
+Example Next.js setup (app or pages):
+
+- Parse and transform in `getStaticProps` or at build time.
+- Pass `transformed` data to React rendering.
+
+```js
+// pages/docs/[slug].js
+export async function getStaticProps(ctx) {
+  const markdown = fs.readFileSync(`content/${ctx.params.slug}.mdoc`, 'utf8');
+  const ast = Markdoc.parse(markdown);
+  const transformed = Markdoc.transform(ast, { schema, variables: { /* ... */ }, functions });
+  return { props: { transformed } };
+}
+
+export default function DocPage({ transformed }) {
+  return (
+    <article>{Markdoc.renderers.react(transformed, React.createElement, { components: MyComponents })}</article>
+  );
+}
+```
+
+### Components mapping
+
+Provide a components mapping where `render` names in your schema match keys in the mapping:
+
+```js
+const components = {
+  Callout: ({ children, type }) => <div className={`callout ${type}`}>{children}</div>,
+  CodeBlock: ({ value, lang }) => <pre><code className={`lang-${lang}`}>{value}</code></pre>
+};
+```
+
+---
+
+## 20. Examples: full pages
+
+### Example: Full feature page with many constructs
+
+```markdoc
+---
+title: "Complete Example"
+date: 2025-10-29
+version: 2
+---
+
+# Complete Example
+
+{% callout type="info" %}
+This page demonstrates many Markdoc features in one place.
+{% /callout %}
+
+## Frontmatter Value
+
+Title from frontmatter: {% $markdoc.frontmatter.title %}
+
+## Table of Contents
+
+{% toc /%}
+
+## Inline tag and annotation
+
+Here is an inline badge: {% badge text="alpha" /%} and a heading with an ID:
+## Features {% id="features" %}
+
+- Item A {% class="muted" %}
+- Item B
+
+## Code block
+
+```js
+console.log("This is a code sample");
+```
+
+## Conditional example
+
+{% if $user and equals($user.role, "admin") %}
+Welcome admin: {% $user.name %}
+{% else %}
+Please sign in to view admin content.
+{% /if %}
+
+## Iteration example (custom each tag required)
+
+{% each $releases as release %}
+- {% release.version %} — {% release.date %}
+{% /each %}
+
+## Table example with annotations
+
+{% table %}
+| Name | Value |
+| --- | --- |
+| Alpha {% width="20%" %} | 1 |
+| Beta | 2 |
+{% /table %}
+
+{% include src="./partials/footnote.mdoc" /%}
+```
+
+---
+
+## 21. Advanced: AST, node transforms, plugins
+
+You can traverse and modify the raw AST before rendering.
+
+```js
+const ast = Markdoc.parse(markdown);
+
+// Walk and change nodes
+Markdoc.walk(ast, (node) => {
+  if (node.type === 'heading' && node.level === 2) {
+    node.attributes = node.attributes || {};
+    node.attributes.class = 'h2-custom';
+  }
+});
+
+const transformed = Markdoc.transform(ast, { schema });
+```
+
+Plugins can wrap the pipeline or transform content at build time (e.g., injecting anchor links, linting, automatic toc generation, frontmatter validation).
+
+---
+
+## 22. Security & best practices
+
+- **Sanitize user content**: If you accept user-generated content, sanitize it to avoid XSS. Use a trusted HTML sanitizer on final HTML (e.g., DOMPurify).
+- **Validate attributes**: Use schema attribute types to ensure data integrity.
+- **Limit remote includes**: Avoid fetching remote content during build unless necessary; prefer local files under your control.
+- **Keep functions deterministic**: Avoid non-deterministic functions in transforms that could produce inconsistent outputs between builds.
+
+---
+
+## 23. Troubleshooting & gotchas
+
+- **Undefined variables**: If an expression references an undefined variable, the transform may throw or output `null`. Ensure you supply variables via the transform call.
+- **Function not registered**: If you call `titleCase()` but didn’t register it, the call fails. Register functions in the `functions` map.
+- **Inline tag display issues**: Inline tags must render as inline elements; otherwise layout breaks. Ensure your component maps return inline elements (e.g., `<span>`).
+- **Annotation collisions**: Multiple annotations on the same node may override each other — be explicit about naming and usage.
+
+---
+
+## 24. Quick reference appendix
+
+### Common tag examples
+
+```markdoc
+{% callout type="warning" %}
+Watch out!
+{% /callout %}
+
+{% banner title="New release" /%}
+
+{% code lang="python" %}
+def hello():
+    print("hello")
+{% /code %}
+```
+
+### Attribute type shorthand
+
+- `attr="string"`
+- `num=42`
+- `flag=true`
+- `list=[1,2,3]`
+- `obj={a:1,b:"x"}`
+
+### Access patterns
+
+- `$markdoc.frontmatter.title`
+- `$user.name`
+- `titleCase($markdoc.frontmatter.title)`
+
+---
+
+## End notes
+
+This file is curated to be a one-stop reference. If you want a **machine-ready schema**, example components, or a Next.js example repo scaffold, tell me and I’ll generate them automatically.
+
+Happy writing — your docs are about to get way more composable. 🎉
