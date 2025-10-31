@@ -3,3 +3,4 @@ grammar = "markdoc"
 path_suffixes = ["mdoc", "markdoc"]
 tab_size = 2
 hard_tabs = false
+line_comments = ["<!--", "-->"]
