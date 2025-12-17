@@ -1,6 +1,6 @@
 name = "Markdoc"
 id = "markdoc"
-version = "0.1.0"
+version = "1.0.0"
 schema_version = 1
 description = "Markdoc language support: syntax highlighting, file associations, and editor integration using tree-sitter-markdoc."
 repository = "https://github.com/louiss0/zed-markdoc-extension"

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2025-12-17
+
+### Added
+- Publishing guide covering Zed registry submodule flow and `pnpm sort-extensions`
+- Repository layout documentation clarifying distributable assets vs. local samples
+
+### Changed
+- Bumped extension and crate versions to `1.0.0` for the initial registry release
+- Moved distributable assets into `extension/` so we can point the upstream `extensions.toml` entry at that path and exclude `samples/`
+
 ## [0.1.0] - 2025-10-21
 
 ### Added

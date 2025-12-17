@@ -18,7 +18,7 @@ Comprehensive [Markdoc](https://markdoc.dev) language support for the [Zed edito
 
 ### Latest Release
 
-The latest version is **v0.1.0** - Initial Release. See [releases page](https://github.com/louiss0/zed-markdoc-extension/releases) for all versions.
+The latest version is **v1.0.0** - Registry Launch Release. See [releases page](https://github.com/louiss0/zed-markdoc-extension/releases) for all versions.
 
 ### From Zed Extensions (Coming Soon)
 
@@ -35,12 +35,23 @@ Once published to the Zed extension registry:
    git clone https://github.com/louiss0/zed-markdoc-extension.git
    ```
 
-2. Symlink or copy to Zed's dev extensions directory:
-   - **Linux**: `ln -s /path/to/zed-markdoc-extension ~/.config/zed/extensions/dev/markdoc`
-   - **macOS**: `ln -s /path/to/zed-markdoc-extension ~/Library/Application\ Support/Zed/extensions/dev/markdoc`
-   - **Windows**: `mklink /D "%APPDATA%\Zed\extensions\dev\markdoc" "C:\path\to\zed-markdoc-extension"`
+2. Symlink or copy the `extension/` subdirectory to Zed's dev extensions directory:
+   - **Linux**: `ln -s /path/to/zed-markdoc-extension/extension ~/.config/zed/extensions/dev/markdoc`
+   - **macOS**: `ln -s /path/to/zed-markdoc-extension/extension ~/Library/Application\ Support/Zed/extensions/dev/markdoc`
+   - **Windows**: `mklink /D "%APPDATA%\Zed\extensions\dev\markdoc" "C:\path\to\zed-markdoc-extension\extension"`
 
 3. Restart Zed
+
+> **Why the extra folder?** The `extension/` directory is what ships to the registry. Keeping samples and documentation at the repo root lets us exclude them from the Zed submission by pointing the registry to `path = "extension"` (see `PUBLISHING.md`).
+
+## Repository Layout
+
+- `extension/` – distributable Zed extension (manifest, languages, Rust source)
+- `samples/` – rich Markdoc examples for regression testing and screenshots; local only
+- `docs/` – publishing and contribution guidelines (`PUBLISHING.md`, `CONTRIBUTING.md`)
+- Everything else – project metadata (CHANGELOG, README, LICENSE, etc.)
+
+The separation ensures we can keep full-length samples in this branch without shipping them in the Zed registry bundle.
 
 ## File Associations
 
@@ -70,3 +81,7 @@ To use Markdoc highlighting for specific .md files, add to your Zed settings:
 ## License
 
 MIT License - See LICENSE file for details
+
+## Publishing to the Zed Registry
+
+Step-by-step instructions for opening the upstream PR (submodule, `extensions.toml`, `pnpm sort-extensions`, etc.) live in [`PUBLISHING.md`](PUBLISHING.md). Follow that guide when preparing the 1.0.0 submission so `samples/` stay local while `extension/` gets packaged.

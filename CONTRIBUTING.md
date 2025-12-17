@@ -3,9 +3,9 @@
 ## Development Setup
 
 1. Clone the repository
-2. Install in Zed's dev extensions directory
+2. Symlink the `extension/` subdirectory into Zed's dev extensions directory
 3. Make changes to queries or configuration
-4. Test with sample files in samples/
+4. Test with the curated documents in `samples/` (they stay in the repo but are excluded from registry packaging via `path = "extension"`)
 
 ## Commit Message Format
 
@@ -35,4 +35,5 @@ Scope: markdoc (for extension-specific changes), repo (for repository setup)
 - Create feature branches from develop: `git flow feature start <feature-name>`
 - Keep commits atomic and well-documented
 - Update CHANGELOG.md
-- Ensure all samples render correctly
+- Ensure all samples render correctly (even though they are excluded from the registry bundle)
+- Follow `PUBLISHING.md` when submitting updates to `zed-industries/extensions`

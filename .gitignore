@@ -9,6 +9,7 @@ Thumbs.db
 dist/
 build/
 target/
+extension/target/
 
 # Zed extension generated files
 grammars/
