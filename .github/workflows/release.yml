@@ -1,0 +1,25 @@
+name: Release Markdoc Extension
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publish to Zed Registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Update zed-industries/extensions
+        uses: huacnlee/zed-extension-action@v2
+        with:
+          extension-name: markdoc
+          extension-path: extension
+          push-to: ${{ github.repository_owner }}/extensions
+        env:
+          COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}

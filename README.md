@@ -85,3 +85,11 @@ MIT License - See LICENSE file for details
 ## Publishing to the Zed Registry
 
 Step-by-step instructions for opening the upstream PR (submodule, `extensions.toml`, `pnpm sort-extensions`, etc.) live in [`PUBLISHING.md`](PUBLISHING.md). Follow that guide when preparing the 1.0.0 submission so `samples/` stay local while `extension/` gets packaged.
+
+## Automated Release Flow
+
+1. Run `scripts/release.sh <new-version>` to bump manifests/CHANGELOG, build the WASM, and prepare the tag. Use `--dry-run` to preview the steps without touching files.
+2. Commit the changes, create the tag (`git tag v<new-version>`), and push tag + commits.
+3. The `Release Markdoc Extension` GitHub Action (`.github/workflows/release.yml`) fires on every `v*` tag. It uses [`huacnlee/zed-extension-action`](https://github.com/huacnlee/zed-extension-action) to open/merge the upstream PR pointing at `extension/`.
+
+> Set the `COMMITTER_TOKEN` repository secret to a Personal Access Token with `repo` and `workflow` scopes so the workflow can push to your `extensions` fork. Without it the job will fail fast.

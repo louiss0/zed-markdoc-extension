@@ -4,6 +4,12 @@ This guide documents the full workflow for publishing the Markdoc extension to t
 
 > **Samples stay local:** Only the `extension/` subdirectory is shipped to Zed. The root-level `samples/` directory remains in this branch for testing but is excluded from the registry build via the `path = "extension"` entry in `extensions.toml`.
 
+## Automation Cheatsheet
+
+- Run `scripts/release.sh <version>` to bump `extension/extension.toml`, `extension/Cargo.toml`, and `CHANGELOG.md`, then compile `extension/extension.wasm`. Pass `--dry-run` to preview the steps without modifying files. The generated WASM is ignored by git so local builds never pollute commits.
+- Push a `v*` tag after committing. The `Release Markdoc Extension` GitHub Action consumes that tag and invokes [`huacnlee/zed-extension-action`](https://github.com/huacnlee/zed-extension-action) with `extension-path = "extension"` so only the distributable directory lands in the upstream PR.
+- The workflow requires a `COMMITTER_TOKEN` secret that points to a PAT with `repo` and `workflow` scopes. It pushes to `${{ github.repository_owner }}/extensions` by default.
+
 ## 1. Prep This Repository
 
 1. Confirm the release version:

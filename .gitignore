@@ -10,6 +10,10 @@ dist/
 build/
 target/
 extension/target/
+extensions/
+
+# Release tooling caches/clones
+zed-extension-action/
 
 # Zed extension generated files
 grammars/
