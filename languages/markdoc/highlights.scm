@@ -11,6 +11,7 @@
 (blockquote) @comment
 (comment_block) @comment
 (html_comment) @comment
+(frontmatter (yaml) @text.literal)
 
 ; Fenced code blocks
 (code_fence_open) @punctuation.bracket
@@ -70,6 +71,11 @@
 ; Tag attributes
 (attribute_name) @attribute
 (attribute "=" @operator)
+(attribute_value (variable_value) @embedded)
+(attribute_value (call_expression) @embedded)
+
+; Inline expression body
+(inline_expression content: (_) @embedded)
 
 ; Variables and references
 (variable "$" @punctuation.special)

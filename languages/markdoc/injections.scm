@@ -22,5 +22,9 @@
  (#set! injection.language "javascript"))
 
 ((attribute_value
-  (value_expression) @injection.content)
+  (variable_value) @injection.content)
+ (#set! injection.language "javascript"))
+
+((attribute_value
+  (call_expression) @injection.content)
  (#set! injection.language "javascript"))
