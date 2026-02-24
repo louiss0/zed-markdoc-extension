@@ -11,7 +11,3 @@ categories = ["Language"]
 [grammars.markdoc]
 repository = "https://github.com/louiss0/tree-sitter-markdoc"
 rev = "4a902cf5f065ca154b7a1c3f46911127e0b0b2b0"
-
-[language_servers.markdoc-language-server]
-name = "Markdoc Language LSP"
-languages = ["Markdoc"]
