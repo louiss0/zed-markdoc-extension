@@ -8,7 +8,6 @@
 
 ; Markdown blocks
 (thematic_break) @punctuation.special
-(blockquote) @comment
 (comment_block) @comment
 (html_comment) @comment
 (frontmatter (yaml) @text.literal)
@@ -53,70 +52,21 @@
 (html_inline) @text.literal
 
 ; Markdoc tags and delimiters
-(tag_open_delimiter) @punctuation.bracket
-(tag_block_close) @punctuation.bracket
+(tag_open) @punctuation.bracket
+(tag_close_start) @punctuation.bracket
+(tag_close) @punctuation.bracket
 (tag_self_close_delimiter) @punctuation.bracket
 (inline_expression_close) @punctuation.bracket
-(tag_close "/" @punctuation.delimiter)
 (tag_name) @tag
 
 ; Markdoc control-flow tags
 [
-  (tag_open (tag_name))
-  (tag_close (tag_name))
-  (tag_self_close (tag_name))
+  (if_keyword)
+  (else_keyword)
 ] @keyword
-(#match? @keyword "^(if|else)$")
 
-; Tag attributes
+; Markdoc attributes and shorthand attributes
 (attribute_name) @attribute
 (attribute "=" @operator)
-(attribute_value (variable_value) @embedded)
-(attribute_value (call_expression) @embedded)
-
-; Inline expression body
-(inline_expression content: (_) @embedded)
-
-; Variables and references
-(variable "$" @punctuation.special)
-(variable (identifier) @variable)
-
-(special_variable "@" @punctuation.special)
-(special_variable (identifier) @variable.special)
-
-(variable_reference "." @punctuation.delimiter)
-(variable_reference (identifier) @property)
-
-(special_variable_reference "." @punctuation.delimiter)
-(special_variable_reference (identifier) @property)
-
-; Subscripts and calls
-(array_subscript
-  "[" @punctuation.bracket
-  "]" @punctuation.bracket)
-
-(call_expression function: (identifier) @function)
-(call_expression
-  "(" @punctuation.bracket
-  ")" @punctuation.bracket)
-(call_expression "," @punctuation.delimiter)
-
-; Literals and structures
-(string) @string
-(number) @number
-(boolean) @boolean
-(null) @constant.builtin
-
-(array_literal
-  "[" @punctuation.bracket
-  "]" @punctuation.bracket)
-(array_literal "," @punctuation.delimiter)
-
-(object_literal
-  "{" @punctuation.bracket
-  "}" @punctuation.bracket)
-(object_literal "," @punctuation.delimiter)
-
-(pair ":" @punctuation.delimiter)
-(pair key: (identifier) @property)
-(pair key: (string) @property)
+(id_shorthand (shorthand_id) @attribute)
+(class_shorthand (shorthand_class) @attribute)
