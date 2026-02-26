@@ -20,11 +20,3 @@
 ((inline_expression
   content: (_) @injection.content)
  (#set! injection.language "javascript"))
-
-((attribute_value
-  (variable_value) @injection.content)
- (#set! injection.language "javascript"))
-
-((attribute_value
-  (call_expression) @injection.content)
- (#set! injection.language "javascript"))
