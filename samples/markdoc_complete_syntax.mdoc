@@ -61,7 +61,7 @@ version: 1.2
 ---
 ```
 
-Access in content via variables or functions: e.g. `$markdoc.frontmatter.title` or `{{ markdoc.frontmatter.title }}` depending on render method.
+Access in content via variables or functions: e.g. `$markdoc.frontmatter.title` or `{% markdoc.frontmatter.title %}` depending on render method.
 
 ---
 
@@ -177,6 +177,8 @@ Examples:
 %}
 ```
 
+
+
 - Strings — quoted or unquoted when simple: `name="x"` or `title=hello` (best to quote).
 - Numbers — `count=5`
 - Booleans — `visible=true`
@@ -206,10 +208,9 @@ Example for tables:
 
 ```markdoc
 {% table %}
-| Name | Description |
-| --- | --- |
-| Alpha {% width="25%" %} | Short desc |
-| Beta | Longer description {% colspan=2 %}
+* fooo {% width="25%" %}
+___
+* ok
 {% /table %}
 ```
 
@@ -233,7 +234,7 @@ Current version: {% $markdoc.frontmatter.version %}
 Or using mustache-like interpolation (depending on renderer):
 
 ```markdown
-{{ user.name }}
+{% user.name %}
 ```
 
 ---
@@ -249,7 +250,7 @@ Examples:
 
 {% if equals($user.role, "admin") %}
 Welcome, admin!
-{% else equals($user.role, "guest") /%}
+{% else  equals($user.role, "guest") /%}
 Welcome guest!
 {% else /%}
 Please sign in.
@@ -272,7 +273,7 @@ Markdoc supports conditional tags in the schema if you register them (many proje
 
 ```markdoc
 {% if $user %}
-Hello, {{ $user.name }}!
+Hello, {% $user.name %}!
 
 {% else equals($role, "guest") /%}
 
@@ -287,25 +288,6 @@ Please sign in.
 
 ---
 
-## 13. Iteration (`for` / `each` patterns)
-
-Markdoc lacks a built-in `for` tag in the core, but you can implement iteration via functions or custom tags. Example pattern with a custom `each` tag:
-
-```markdoc
-{% each items as item %}
-- {% item.name %}: {% item.value %}
-{% /each %}
-```
-
-Alternatively, use `map` functions in expressions:
-
-```markdoc
-{% forEach($items, (i) => `{% bullet %}${i.name}{% /bullet %}`) %}
-```
-
-(Implementation details depend on how you register functions and whether your renderer supports dynamic HTML string injection — prefer custom tags that accept arrays.)
-
----
 
 ## 14. Includes & partials
 
@@ -336,7 +318,7 @@ Then in Markdoc:
 
 ```markdoc
 {% each $releases as r %}
-- {{ r.version }} — {{ r.date }}
+- {% r.version %} — {% r.date %}
 {% /each %}
 ```
 
