@@ -38,9 +38,9 @@ Markdoc supports custom tags for rich content.
 
 ### Variables and Expressions
 
-Welcome: {{ $user.name }}
-Current date: {{ $date }}
-Is admin: {{ $user.role === 'admin' }}
+Welcome: {% $user.name %}
+Current date: {% $date %}
+Is admin: {% $user.role === 'admin' %}
 
 > This is a blockquote with **bold** text.
 
