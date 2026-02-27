@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Documented official Zed extension publishing steps via `zed-industries/extensions`.
+- Added GitHub Actions release workflow using `huacnlee/zed-extension-action@v2` to automate update PR creation.
+
 ## [0.1.0] - 2025-10-21
 
 ### Added

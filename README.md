@@ -20,9 +20,9 @@ Comprehensive [Markdoc](https://markdoc.dev) language support for the [Zed edito
 
 The latest version is **v0.1.0** - Initial Release. See [releases page](https://github.com/louiss0/zed-markdoc-extension/releases) for all versions.
 
-### From Zed Extensions (Coming Soon)
+### From Zed Extensions
 
-Once published to the Zed extension registry:
+After this extension is accepted in the Zed extension registry:
 1. Open Zed
 2. Go to Extensions
 3. Search for "Markdoc"
@@ -41,6 +41,42 @@ Once published to the Zed extension registry:
    - **Windows**: `mklink /D "%APPDATA%\Zed\extensions\dev\markdoc" "C:\path\to\zed-markdoc-extension"`
 
 3. Restart Zed
+
+## Publishing to the Zed Registry
+
+Zed publishes extensions from PRs to the [`zed-industries/extensions`](https://github.com/zed-industries/extensions) repository.
+
+1. Fork `zed-industries/extensions` to your account.
+2. Add this repository as a submodule in your fork (HTTPS URL required):
+   ```bash
+   git submodule add https://github.com/louiss0/zed-markdoc-extension.git extensions/markdoc
+   git add extensions/markdoc
+   ```
+3. Add this entry to your fork's top-level `extensions.toml`:
+   ```toml
+   [markdoc]
+   submodule = "extensions/markdoc"
+   version = "0.1.0"
+   ```
+4. Run `pnpm sort-extensions` in the `zed-industries/extensions` repo.
+5. Open a PR from your fork to `zed-industries/extensions`.
+
+## Automating Registry Update PRs
+
+This repository now includes [`.github/workflows/release.yml`](.github/workflows/release.yml), powered by [`huacnlee/zed-extension-action@v2`](https://github.com/huacnlee/zed-extension-action), to automate update PRs to `zed-industries/extensions` on each release tag.
+
+Before using the workflow:
+
+1. Fork `zed-industries/extensions` to `louiss0/extensions`.
+2. Create a GitHub personal access token with `repo` and `workflow` scopes.
+3. Add that token in this repo as the `COMMITTER_TOKEN` Actions secret.
+
+Then publish by tagging:
+
+```bash
+git tag v0.1.1
+git push origin v0.1.1
+```
 
 ## File Associations
 
