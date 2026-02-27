@@ -67,6 +67,10 @@ To use Markdoc highlighting for specific .md files, add to your Zed settings:
 - Grammar: [tree-sitter-markdoc](https://github.com/louiss0/tree-sitter-markdoc)
 - Extension developed for Zed editor
 
+## Known Limitations
+
+- Blockquote highlighting currently does not distinguish nested blockquote content nodes reliably; marker vs. content highlighting is still being refined.
+
 ## License
 
 MIT License - See LICENSE file for details

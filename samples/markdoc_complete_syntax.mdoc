@@ -9,6 +9,14 @@ This file aims to be a single, comprehensive `.mdoc` reference covering the majo
 
 > Note: Markdoc evolves — this file captures syntax and patterns commonly used and supported by the Markdoc project as of this writing. For the definitive source on behaviour and API, check the Markdoc repo and docs.
 
+>  Foo
+> - Fooo
+> - Barr {% width=50 %} {% align="center" %}
+
+> ```js
+>   console.log('Hello, world!');
+> ```
+
 ---
 
 ## Table of Contents
@@ -484,29 +492,23 @@ console.log("This is a code sample");
 
 ## Conditional example
 
-{% if $user and equals($user.role, "admin") %}
+{% if equals($user.role, "admin") %}
 Welcome admin: {% $user.name %}
 {% else %}
 Please sign in to view admin content.
 {% /if %}
 
-## Iteration example (custom each tag required)
-
-{% each $releases as release %}
-- {% release.version %} — {% release.date %}
-{% /each %}
 
 ## Table example with annotations
 
 {% table %}
-| Name | Value |
-| --- | --- |
-| Alpha {% width="20%" %} | 1 |
-| Beta | 2 |
+* ok
+___
+* nice
 {% /table %}
 
 {% include src="./partials/footnote.mdoc" /%}
-```
+
 
 ---
 
