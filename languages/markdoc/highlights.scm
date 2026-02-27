@@ -8,13 +8,15 @@
 
 ; Markdown blocks
 (thematic_break) @punctuation.special
+(blockquote_marker) @punctuation.special
+(blockquote_content (list_paragraph) @title)
 (comment_block) @comment
 (html_comment) @comment
 (frontmatter (yaml) @text.literal)
 
 ; Fenced code blocks
-(code_fence_open) @punctuation.bracket
-(code_fence_close) @punctuation.bracket
+(code_fence_open) @punctuation.delimiter
+(code_fence_close) @punctuation.delimiter
 (language) @label
 (info_string (attributes) @attribute)
 (code) @text.literal
@@ -59,6 +61,11 @@
 (inline_expression_close) @punctuation.bracket
 (tag_name) @tag
 
+; Ensure open/close/self-close tag names are all captured as tags
+(tag_open_block (tag_name) @tag)
+(tag_end (tag_name) @tag)
+(inline_tag (tag_name) @tag)
+
 ; Markdoc control-flow tags
 [
   (if_keyword)
@@ -66,7 +73,17 @@
 ] @keyword
 
 ; Markdoc attributes and shorthand attributes
-(attribute_name) @attribute
+(attribute_name) @property
 (attribute "=" @operator)
 (id_shorthand (shorthand_id) @attribute)
 (class_shorthand (shorthand_class) @attribute)
+
+; Annotation delimiters: {% ... %}
+(annotation_block
+  (inline_expression_open) @punctuation.delimiter
+  (inline_expression_close) @punctuation.delimiter)
+
+; Annotation key/value highlighting (e.g. {% colspan=2 %})
+(annotation_name) @property
+(annotation_block "=" @operator)
+(annotation_value (identifier) @variable)
