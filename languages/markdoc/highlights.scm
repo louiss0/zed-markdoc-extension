@@ -58,7 +58,6 @@
 (tag_close_start) @punctuation.bracket
 (tag_close) @punctuation.bracket
 (tag_self_close_delimiter) @punctuation.bracket
-(inline_expression_close) @punctuation.bracket
 (tag_name) @tag
 
 ; Ensure open/close/self-close tag names are all captured as tags
@@ -71,6 +70,11 @@
   (if_keyword)
   (else_keyword)
 ] @keyword
+
+; Inline expression delimiters: {% ... %}
+(inline_expression
+  (inline_expression_open) @punctuation.special
+  (inline_expression_close) @punctuation.special)
 
 ; Markdoc attributes and shorthand attributes
 (attribute_name) @property
@@ -87,3 +91,33 @@
 (annotation_name) @property
 (annotation_block "=" @operator)
 (annotation_value (identifier) @variable)
+
+; Variable and expression highlighting
+(variable "$" @punctuation.special)
+(variable (identifier) @variable)
+
+(special_variable "@" @punctuation.special)
+(special_variable (identifier) @variable.special)
+
+(variable_reference "." @punctuation.delimiter)
+(variable_reference (identifier) @property)
+
+(special_variable_reference "." @punctuation.delimiter)
+(special_variable_reference (identifier) @property)
+
+(subscript_reference
+  (array_subscript
+    "[" @punctuation.bracket
+    "]" @punctuation.bracket))
+
+(call_expression function: (identifier) @function)
+(inline_call_expression function: (function_identifier) @function)
+
+(string) @string
+(number) @number
+(boolean) @boolean
+(null) @constant.builtin
+
+(pair key: (identifier) @property)
+(pair key: (string) @property)
+(pair ":" @punctuation.delimiter)
