@@ -1,20 +1,20 @@
-; Indent inside lists
-(list_item) @indent
+; Indent Markdoc blocks that have explicit closers.
+(fenced_code_block
+  (code_fence_close) @end) @indent
 
-; Indent inside fenced code blocks
-(fenced_code_block) @indent
+(markdoc_tag
+  (tag_end
+    (inline_expression_close) @end)) @indent
 
-; Indent inside Markdoc tags
-(markdoc_tag) @indent
+(if_tag
+  (if_tag_close
+    (inline_expression_close) @end)) @indent
 
-; Indent inside if/else conditional tags
-(if_tag) @indent
+; Indent list item content.
+(unordered_list_item) @indent
+(ordered_list_item) @indent
 
-; Indent inside HTML blocks
-(html_block) @indent
-
-; Indent inside blockquotes
-(blockquote) @indent
-
-; Indent inside Markdoc tables
-(markdoc_table) @indent
+; Expression literals in attributes/tags.
+(array_literal "]" @end) @indent
+(object_literal "}" @end) @indent
+(call_expression ")" @end) @indent

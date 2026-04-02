@@ -4,18 +4,19 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
   publish:
-    name: Publish to Zed Registry
+    name: Publish extension update PR
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
-      - name: Update zed-industries/extensions
+      - name: Bump extension in zed-industries/extensions
         uses: huacnlee/zed-extension-action@v2
         with:
           extension-name: markdoc

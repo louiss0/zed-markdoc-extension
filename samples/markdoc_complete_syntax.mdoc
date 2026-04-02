@@ -9,7 +9,18 @@ This file aims to be a single, comprehensive `.mdoc` reference covering the majo
 
 > Note: Markdoc evolves — this file captures syntax and patterns commonly used and supported by the Markdoc project as of this writing. For the definitive source on behaviour and API, check the Markdoc repo and docs.
 
+>  Foo
+> - Fooo
+> - Barr {% width=5 %} {% align="center" %}
+
+> ```js
+>   console.log('Hello, world!');
+> ```
+
 ---
+
+{% console.log('Hello, world!') %}
+
 
 ## Table of Contents
 
@@ -61,7 +72,7 @@ version: 1.2
 ---
 ```
 
-Access in content via variables or functions: e.g. `$markdoc.frontmatter.title` or `{{ markdoc.frontmatter.title }}` depending on render method.
+Access in content via variables or functions: e.g. `$markdoc.frontmatter.title` or `{% markdoc.frontmatter.title %}` depending on render method.
 
 ---
 
@@ -177,6 +188,15 @@ Examples:
 %}
 ```
 
+<article>
+    This is nice
+</article>
+
+<footer>
+   This is nice
+</footer>
+
+
 - Strings — quoted or unquoted when simple: `name="x"` or `title=hello` (best to quote).
 - Numbers — `count=5`
 - Booleans — `visible=true`
@@ -206,10 +226,9 @@ Example for tables:
 
 ```markdoc
 {% table %}
-| Name | Description |
-| --- | --- |
-| Alpha {% width="25%" %} | Short desc |
-| Beta | Longer description {% colspan=2 %}
+* fooo {% width="25%" %}
+___
+* ok
 {% /table %}
 ```
 
@@ -233,7 +252,7 @@ Current version: {% $markdoc.frontmatter.version %}
 Or using mustache-like interpolation (depending on renderer):
 
 ```markdown
-{{ user.name }}
+{% user.name %}
 ```
 
 ---
@@ -249,7 +268,7 @@ Examples:
 
 {% if equals($user.role, "admin") %}
 Welcome, admin!
-{% else equals($user.role, "guest") /%}
+{% else  equals($user.role, "guest") /%}
 Welcome guest!
 {% else /%}
 Please sign in.
@@ -272,7 +291,7 @@ Markdoc supports conditional tags in the schema if you register them (many proje
 
 ```markdoc
 {% if $user %}
-Hello, {{ $user.name }}!
+Hello, {% $user.name %}!
 
 {% else equals($role, "guest") /%}
 
@@ -287,25 +306,6 @@ Please sign in.
 
 ---
 
-## 13. Iteration (`for` / `each` patterns)
-
-Markdoc lacks a built-in `for` tag in the core, but you can implement iteration via functions or custom tags. Example pattern with a custom `each` tag:
-
-```markdoc
-{% each items as item %}
-- {% item.name %}: {% item.value %}
-{% /each %}
-```
-
-Alternatively, use `map` functions in expressions:
-
-```markdoc
-{% forEach($items, (i) => `{% bullet %}${i.name}{% /bullet %}`) %}
-```
-
-(Implementation details depend on how you register functions and whether your renderer supports dynamic HTML string injection — prefer custom tags that accept arrays.)
-
----
 
 ## 14. Includes & partials
 
@@ -319,65 +319,7 @@ Include external Markdoc files or snippets.
 
 ---
 
-## 15. Importing data (JSON/YAML) and assets
 
-You can import JSON or YAML into the rendering context ahead of transform:
-
-Example JS build step:
-
-```js
-import fs from 'fs';
-const data = JSON.parse(fs.readFileSync('./data/versions.json', 'utf8'));
-const ast = Markdoc.parse(markdown);
-const content = Markdoc.transform(ast, { variables: { releases: data } });
-```
-
-Then in Markdoc:
-
-```markdoc
-{% each $releases as r %}
-- {{ r.version }} — {{ r.date }}
-{% /each %}
-```
-
----
-
-## 16. Schema: tags, attributes, and functions (JS examples)
-
-Define a tag in your Markdoc schema to tell Markdoc how to transform it and validate attributes.
-
-```js
-// schema.js
-export const schema = {
-  tags: {
-    callout: {
-      render: 'Callout', // React/JSX component name or a string renderer
-      attributes: {
-        type: { type: String },
-        icon: { type: String },
-        collapsible: { type: Boolean, default: false },
-      },
-      children: ['paragraph', 'list', 'tag'] // allowed children types
-    },
-    code: {
-      render: 'CodeBlock',
-      attributes: {
-        lang: { type: String },
-        filename: { type: String },
-        lineNumbers: { type: Boolean, default: false }
-      }
-    }
-  },
-  functions: {
-    titleCase: (value) => {/* implement */},
-    equals: (a,b) => a === b
-  }
-};
-```
-
-`render` can point to a component name (for frameworks) or a function that returns HTML.
-
----
 
 ## 17. Custom functions (how to register)
 
@@ -448,18 +390,6 @@ export default function DocPage({ transformed }) {
 }
 ```
 
-### Components mapping
-
-Provide a components mapping where `render` names in your schema match keys in the mapping:
-
-```js
-const components = {
-  Callout: ({ children, type }) => <div className={`callout ${type}`}>{children}</div>,
-  CodeBlock: ({ value, lang }) => <pre><code className={`lang-${lang}`}>{value}</code></pre>
-};
-```
-
----
 
 ## 20. Examples: full pages
 
@@ -502,29 +432,23 @@ console.log("This is a code sample");
 
 ## Conditional example
 
-{% if $user and equals($user.role, "admin") %}
+{% if equals($user.role, "admin") %}
 Welcome admin: {% $user.name %}
 {% else %}
 Please sign in to view admin content.
 {% /if %}
 
-## Iteration example (custom each tag required)
-
-{% each $releases as release %}
-- {% release.version %} — {% release.date %}
-{% /each %}
 
 ## Table example with annotations
 
 {% table %}
-| Name | Value |
-| --- | --- |
-| Alpha {% width="20%" %} | 1 |
-| Beta | 2 |
+* ok
+___
+* nice
 {% /table %}
 
 {% include src="./partials/footnote.mdoc" /%}
-```
+
 
 ---
 

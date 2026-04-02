@@ -2,6 +2,19 @@
 
 This document outlines planned improvements and potential features for the Zed Markdoc extension.
 
+## Latest Findings (2026-02-24)
+
+### Completed
+- [x] Aligned `languages/markdoc/*.scm` queries with actual parser node types from `grammars/markdoc/src/node-types.json`
+- [x] Replaced unsupported/non-Zed capture names with documented Zed captures
+- [x] Added `languages/markdoc/brackets.scm` for Markdoc delimiters and core expression delimiters
+- [x] Added/refined frontmatter YAML and Markdoc expression injections
+- [x] Updated folds/indents/locals to remove stale node references
+
+### Remaining Gaps
+- [ ] Parser/docs mismatch: Markdoc docs show inline annotation syntax like `{% width="25%" %}`, but current grammar primarily models inline self-closing tag forms (`/%}`) in paragraph/list inline contexts
+- [ ] Add explicit grammar coverage for annotation-style inline tags from docs and then refine highlighting/injections for those nodes
+
 ## Short-term (v0.2.x)
 
 ### Query Improvements

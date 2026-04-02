@@ -1,20 +1,13 @@
-; Parameters in arrow functions are local definitions
-(arrow_function (identifier) @definition.parameter)
-
 ; Variable references
 (variable (identifier) @reference)
+(special_variable (identifier) @reference)
 
-; Property references in member access
-(member_expression property: (identifier) @reference)
+(variable_reference (identifier) @reference)
+(special_variable_reference (identifier) @reference)
 
-; Object being accessed is a reference too
-(member_expression object: (identifier) @reference)
+; Called identifiers
+(call_expression function: (identifier) @reference.call)
 
-; Called identifiers as references (best-effort)
-(call_expression (identifier) @reference)
-
-; Object literal field definitions
-(pair (identifier) @definition.field)
-
-; Tag attribute names as field definitions
+; Field-like names
+(pair key: (identifier) @definition.field)
 (attribute (attribute_name) @definition.field)
