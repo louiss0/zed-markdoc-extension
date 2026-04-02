@@ -7,11 +7,9 @@
 ; Fold Markdoc tags
 (markdoc_tag) @fold
 
-; Fold if/else conditional tags
-(if_tag) @fold
-
 ; Fold lists
-(list) @fold
+(unordered_list) @fold
+(ordered_list) @fold
 
 ; Fold HTML blocks
 (html_block) @fold
@@ -24,7 +22,3 @@
 
 ; Fold blockquotes
 (blockquote) @fold
-
-; Fold tables
-(markdown_table) @fold
-(markdoc_table) @fold

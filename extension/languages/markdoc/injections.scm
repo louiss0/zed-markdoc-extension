@@ -1,34 +1,22 @@
-; Inject languages into fenced code blocks
+; Fenced code block language injections.
 ((fenced_code_block
   (code_fence_open (info_string (language) @injection.language))
   (code) @injection.content)
  (#set! injection.include-children))
 
-; Inject YAML for frontmatter blocks
-((frontmatter) @injection.content
+; Frontmatter body as YAML.
+((frontmatter
+  (yaml) @injection.content)
  (#set! injection.language "yaml"))
 
-; Inject HTML for HTML blocks and inline HTML
+; HTML snippets.
 ((html_block) @injection.content
- (#set! injection.language "html")
- (#set! injection.include-children))
+ (#set! injection.language "html"))
 
 ((html_inline) @injection.content
  (#set! injection.language "html"))
 
-; Inject JavaScript-like expressions inside {{ ... }}
+; Markdoc expression language (JS-like syntax).
 ((inline_expression
-   content: (expression) @injection.content)
- (#set! injection.language "javascript"))
-
-; Inject expressions used as attribute values in tags
-((attribute_value (expression) @injection.content)
- (#set! injection.language "javascript"))
-
-; Inject JavaScript expressions in if tag conditions
-((if_tag_open condition: (expression) @injection.content)
- (#set! injection.language "javascript"))
-
-; Inject JavaScript expressions in else tag conditions
-((else_tag condition: (expression) @injection.content)
+  content: (_) @injection.content)
  (#set! injection.language "javascript"))

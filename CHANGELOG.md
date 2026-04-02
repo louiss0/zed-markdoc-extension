@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Documented official Zed extension publishing steps via
+  `zed-industries/extensions`.
+- Added GitHub Actions release workflow using
+  `huacnlee/zed-extension-action@v2` to automate update PR creation.
+
 ## [1.0.0] - 2025-12-17
 
 ### Added
@@ -15,7 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Bumped extension and crate versions to `1.0.0` for the initial registry release
-- Moved distributable assets into `extension/` so we can point the upstream `extensions.toml` entry at that path and exclude `samples/`
+- Moved distributable assets into `extension/` so we can point the upstream
+  `extensions.toml` entry at that path and exclude `samples/`
 
 ## [0.1.0] - 2025-10-21
 
