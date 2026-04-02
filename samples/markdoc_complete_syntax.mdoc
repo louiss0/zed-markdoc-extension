@@ -21,6 +21,7 @@ This file aims to be a single, comprehensive `.mdoc` reference covering the majo
 
 {% console.log('Hello, world!') %}
 
+
 ## Table of Contents
 
 1. Frontmatter (YAML)
@@ -187,6 +188,13 @@ Examples:
 %}
 ```
 
+<article>
+    This is nice
+</article>
+
+<footer>
+   This is nice
+</footer>
 
 
 - Strings — quoted or unquoted when simple: `name="x"` or `title=hello` (best to quote).
@@ -311,65 +319,7 @@ Include external Markdoc files or snippets.
 
 ---
 
-## 15. Importing data (JSON/YAML) and assets
 
-You can import JSON or YAML into the rendering context ahead of transform:
-
-Example JS build step:
-
-```js
-import fs from 'fs';
-const data = JSON.parse(fs.readFileSync('./data/versions.json', 'utf8'));
-const ast = Markdoc.parse(markdown);
-const content = Markdoc.transform(ast, { variables: { releases: data } });
-```
-
-Then in Markdoc:
-
-```markdoc
-{% each $releases as r %}
-- {% r.version %} — {% r.date %}
-{% /each %}
-```
-
----
-
-## 16. Schema: tags, attributes, and functions (JS examples)
-
-Define a tag in your Markdoc schema to tell Markdoc how to transform it and validate attributes.
-
-```js
-// schema.js
-export const schema = {
-  tags: {
-    callout: {
-      render: 'Callout', // React/JSX component name or a string renderer
-      attributes: {
-        type: { type: String },
-        icon: { type: String },
-        collapsible: { type: Boolean, default: false },
-      },
-      children: ['paragraph', 'list', 'tag'] // allowed children types
-    },
-    code: {
-      render: 'CodeBlock',
-      attributes: {
-        lang: { type: String },
-        filename: { type: String },
-        lineNumbers: { type: Boolean, default: false }
-      }
-    }
-  },
-  functions: {
-    titleCase: (value) => {/* implement */},
-    equals: (a,b) => a === b
-  }
-};
-```
-
-`render` can point to a component name (for frameworks) or a function that returns HTML.
-
----
 
 ## 17. Custom functions (how to register)
 
@@ -440,18 +390,6 @@ export default function DocPage({ transformed }) {
 }
 ```
 
-### Components mapping
-
-Provide a components mapping where `render` names in your schema match keys in the mapping:
-
-```js
-const components = {
-  Callout: ({ children, type }) => <div className={`callout ${type}`}>{children}</div>,
-  CodeBlock: ({ value, lang }) => <pre><code className={`lang-${lang}`}>{value}</code></pre>
-};
-```
-
----
 
 ## 20. Examples: full pages
 
