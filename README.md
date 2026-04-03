@@ -13,6 +13,8 @@ Comprehensive [Markdoc](https://markdoc.dev) language support for the [Zed edito
 - Code fence language injection for embedded syntax highlighting
 - Folding, indentation, and bracket matching
 - Support for Markdoc tags, variables, and attributes
+- Automatic installation and startup of the official Markdoc language server
+- `markdoc.config.json` support for schema-aware completions and validation
 
 ## Installation
 
@@ -20,9 +22,9 @@ Comprehensive [Markdoc](https://markdoc.dev) language support for the [Zed edito
 
 The latest version is **v1.0.0** - Registry Launch Release. See [releases page](https://github.com/louiss0/zed-markdoc-extension/releases) for all versions.
 
-### From Zed Extensions (Coming Soon)
+### From Zed Extensions
 
-Once published to the Zed extension registry:
+After this extension is accepted in the Zed extension registry:
 1. Open Zed
 2. Go to Extensions
 3. Search for "Markdoc"
@@ -42,16 +44,48 @@ Once published to the Zed extension registry:
 
 3. Restart Zed
 
-> **Why the extra folder?** The `extension/` directory is what ships to the registry. Keeping samples and documentation at the repo root lets us exclude them from the Zed submission by pointing the registry to `path = "extension"` (see `PUBLISHING.md`).
+> **Why the extra folder?** The `extension/` directory is what ships to the
+> registry. Keeping samples and documentation at the repo root lets us exclude
+> them from the Zed submission by pointing the upstream manifest at
+> `path = "extension"`.
 
 ## Repository Layout
 
-- `extension/` – distributable Zed extension (manifest, languages, Rust source)
-- `samples/` – rich Markdoc examples for regression testing and screenshots; local only
-- `docs/` – publishing and contribution guidelines (`PUBLISHING.md`, `CONTRIBUTING.md`)
-- Everything else – project metadata (CHANGELOG, README, LICENSE, etc.)
+- `extension/` - distributable Zed extension (manifest, languages, Rust source)
+- `samples/` - rich Markdoc examples for regression testing and schema fixtures
+- Repository root - project metadata, workflow config, and package metadata
 
 The separation ensures we can keep full-length samples in this branch without shipping them in the Zed registry bundle.
+
+## Language Server Setup
+
+This extension starts the official `@markdoc/language-server` package through
+Zed's Rust extension API.
+
+For schema-aware validation, completions, definitions, and routing, add a
+`markdoc.config.json` file at your workspace root. The Markdoc language server
+expects an array of server instances. Example:
+
+```json
+[
+  {
+    "id": "docs",
+    "path": "docs/content",
+    "schema": {
+      "path": "docs/dist/schema.js",
+      "type": "node",
+      "property": "default",
+      "watch": true
+    },
+    "routing": {
+      "frontmatter": "route"
+    }
+  }
+]
+```
+
+Without a `markdoc.config.json`, the server still starts, but it falls back to
+workspace-root defaults and won't have project-specific schema information.
 
 ## File Associations
 
@@ -78,18 +112,30 @@ To use Markdoc highlighting for specific .md files, add to your Zed settings:
 - Grammar: [tree-sitter-markdoc](https://github.com/louiss0/tree-sitter-markdoc)
 - Extension developed for Zed editor
 
+## Known Limitations
+
+- Blockquote highlighting currently does not distinguish nested blockquote content nodes reliably; marker vs. content highlighting is still being refined.
+
 ## License
 
 MIT License - See LICENSE file for details
 
 ## Publishing to the Zed Registry
 
-Step-by-step instructions for opening the upstream PR (submodule, `extensions.toml`, `pnpm sort-extensions`, etc.) live in [`PUBLISHING.md`](PUBLISHING.md). Follow that guide when preparing the 1.0.0 submission so `samples/` stay local while `extension/` gets packaged.
+This repository publishes from the `extension/` subdirectory so samples and
+workspace-only tooling stay out of the registry package. When preparing a
+release, update the extension metadata, tag the release, and let the workflow
+open the upstream update PR against your `extensions` fork.
 
 ## Automated Release Flow
 
-1. Run `scripts/release.sh <new-version>` to bump manifests/CHANGELOG, build the WASM, and prepare the tag. Use `--dry-run` to preview the steps without touching files.
-2. Commit the changes, create the tag (`git tag v<new-version>`), and push tag + commits.
-3. The `Release Markdoc Extension` GitHub Action (`.github/workflows/release.yml`) fires on every `v*` tag. It uses [`huacnlee/zed-extension-action`](https://github.com/huacnlee/zed-extension-action) to open/merge the upstream PR pointing at `extension/`.
+1. Update the extension version and changelog entries.
+2. Commit the release changes, create the tag (`git tag v<new-version>`), and push the branch plus tag.
+3. The `Release Markdoc Extension` GitHub Action
+   ([`.github/workflows/release.yml`](.github/workflows/release.yml)) runs on
+   every `v*` tag and can also be started manually with `workflow_dispatch`.
+4. The workflow uses
+   [`huacnlee/zed-extension-action`](https://github.com/huacnlee/zed-extension-action)
+   to open the upstream PR pointing at `extension/`.
 
 > Set the `COMMITTER_TOKEN` repository secret to a Personal Access Token with `repo` and `workflow` scopes so the workflow can push to your `extensions` fork. Without it the job will fail fast.

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Automatic installation and startup of the official Markdoc language server
+- `markdoc.config.json` support for schema-aware completions and validation
+
+### Changed
+- Added a manual trigger to the release workflow for registry update PRs
+
 ## [1.0.0] - 2025-12-17
 
 ### Added

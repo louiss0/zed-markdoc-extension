@@ -1,377 +1,123 @@
-; ============================================================================
-; Tree-sitter Syntax Highlighting Queries for Markdoc
-; ============================================================================
-; This file defines syntax highlighting patterns for the Markdoc language,
-; which extends Markdown with custom tags and expressions.
-;
-; Capture naming follows Tree-sitter conventions for cross-editor compatibility:
-; - Neovim (nvim-treesitter)
-; - Helix
-; - Zed
-; ============================================================================
+; Markdoc highlights for Zed.
+; Keep queries aligned to grammars/markdoc/src/node-types.json and the capture
+; set documented at zed.dev/docs/extensions/languages#syntax-highlighting.
 
-; ============================================================================
-; FRONTMATTER
-; ============================================================================
+; Headings
+(heading_marker) @punctuation.special
+(heading_text) @title
 
-(frontmatter) @markup.raw.block
-
-; ============================================================================
-; HEADINGS
-; ============================================================================
-
-; Heading markers (#, ##, ###, etc.)
-(heading_marker) @markup.heading.marker
-
-; Heading text content
-(heading_text) @markup.heading
-
-; ============================================================================
-; THEMATIC BREAKS (HORIZONTAL RULES)
-; ============================================================================
-
+; Markdown blocks
 (thematic_break) @punctuation.special
+(blockquote_marker) @punctuation.special
+(blockquote_content (list_paragraph) @title)
+(comment_block) @comment
+(html_comment) @comment
+(frontmatter (yaml) @text.literal)
 
-; ============================================================================
-; BLOCKQUOTES
-; ============================================================================
-
-(blockquote ">" @markup.quote)
-
-; ============================================================================
-; CODE BLOCKS (FENCED)
-; ============================================================================
-
-; Code fence delimiters (``` or ~~~)
-(code_fence_open) @punctuation.bracket
-(code_fence_close) @punctuation.bracket
-
-; Language identifier (e.g., javascript, python, go)
+; Fenced code blocks
+(code_fence_open) @punctuation.delimiter
+(code_fence_close) @punctuation.delimiter
 (language) @label
-
-; Attributes in info string (e.g., {1-5})
 (info_string (attributes) @attribute)
+(code) @text.literal
+(inline_code) @text.literal
 
-; Code content
-(code) @markup.raw.block
+; Lists
+(unordered_list_marker) @punctuation.list_marker
+(ordered_list_marker) @punctuation.list_marker
 
-; ============================================================================
-; LISTS
-; ============================================================================
+; Inline formatting
+(emphasis) @emphasis
+(strong) @emphasis.strong
 
-; List markers (-, *, +, 1., 2., etc.)
-(list_marker) @markup.list
-
-; Bullet markers in regular lists
-(list (list_item (list_marker) @markup.list.bullet)
-  (#match? @markup.list.bullet "^[*+-][ \t]+$"))
-
-; Numbered list markers in regular lists
-(list (list_item (list_marker) @markup.list.numbered)
-  (#match? @markup.list.numbered "^[0-9]+\.[ \t]+$"))
-
-; List item annotations: {% type %}
-(list_item_annotation
-  "{%" @punctuation.bracket
-  "%}" @punctuation.bracket)
-(list_item_annotation type: (annotation_type) @attribute)
-(list_item_annotation (attribute) @attribute)
-
-
-; ============================================================================
-; INLINE FORMATTING
-; ============================================================================
-
-; Emphasis (italic) - *text* or _text_
-(emphasis) @markup.italic
-
-; Strong (bold) - **text** or __text__
-(strong) @markup.bold
-
-; Inline code - `code`
-(inline_code) @markup.raw.inline
-
-; ============================================================================
-; LINKS AND IMAGES
-; ============================================================================
-
-; Link structure: [text](url)
+; Links and images
 (link
   "[" @punctuation.bracket
   "]" @punctuation.bracket
   "(" @punctuation.bracket
   ")" @punctuation.bracket)
 
-(link_text) @markup.link.label
-(link_destination) @markup.link.url
+(link_text) @link_text
+(link_destination) @link_uri
 
-; Image structure: ![alt](url)
 (image
   "![" @punctuation.bracket
   "]" @punctuation.bracket
   "(" @punctuation.bracket
   ")" @punctuation.bracket)
 
-(image_alt) @markup.link.label
-(image_destination) @markup.link.url
+(image_alt) @link_text
+(image_destination) @link_uri
 
-; ============================================================================
-; HTML
-; ============================================================================
+; HTML token blocks
+(html_block) @text.literal
+(html_inline) @text.literal
 
-; HTML blocks (block-level tags)
-(html_block) @markup.raw.block
-
-; HTML inline (inline tags)
-(html_inline) @markup.raw.inline
-
-; HTML comments <!-- comment -->
-(html_comment) @comment
-
-; ============================================================================
-; MARKDOWN TABLES
-; ============================================================================
-
-; Table pipes
-(markdown_table_header "|" @punctuation.bracket)
-(markdown_table_separator "|" @punctuation.bracket)
-(markdown_table_row "|" @punctuation.bracket)
-
-; Separator cells (---)
-(markdown_table_sep_cell) @punctuation.special
-
-; Header cell content emphasized
-(markdown_table_header (markdown_table_cell) @markup.bold)
-
-; Body row cell content
-(markdown_table_row (markdown_table_cell) @none)
-
-; ============================================================================
-; MARKDOC TABLES
-; ============================================================================
-
-; Markdoc table open/close tags
-(markdoc_table_open
-  "{%" @punctuation.bracket
-  "%}" @punctuation.bracket)
-(markdoc_table_close
-  "{%" @punctuation.bracket
-  "%}" @punctuation.bracket)
-
-; Markdoc table separators (---)
-(markdoc_table_separator) @punctuation.special
-
-; Markdoc table cell list markers
-(markdoc_table_cell marker: (list_marker) @markup.list)
-
-; Markdoc table header cells - emphasize like markdown table headers
-(markdoc_table_header (markdoc_table_cell) @markup.bold)
-
-; Markdoc table cell annotations: {% colspan=2 %}
-(markdoc_table_cell_annotation
-  "{%" @punctuation.bracket
-  "%}" @punctuation.bracket)
-(markdoc_table_cell_annotation (annotation_name) @attribute)
-(markdoc_table_cell_annotation (annotation_value) @number)
-(markdoc_table_cell_annotation "=" @operator)
-
-; ============================================================================
-; MARKDOC TAGS
-; ============================================================================
-
-; Tag delimiters: {% and %} and /%}
-("{%" @punctuation.bracket)
-("%}" @punctuation.bracket)
-("/%}" @punctuation.bracket)
-
-; Tag names (e.g., callout, table, partial)
+; Markdoc tags and delimiters
+(tag_open) @punctuation.bracket
+(tag_close_start) @punctuation.bracket
+(tag_close) @punctuation.bracket
+(tag_self_close_delimiter) @punctuation.bracket
 (tag_name) @tag
 
-; Table tag specifically (built-in)
-(markdoc_table_open (tag_name) @tag.builtin)
-(markdoc_table_close (tag_name) @tag.builtin)
+; Ensure open/close/self-close tag names are all captured as tags
+(tag_open_block (tag_name) @tag)
+(tag_end (tag_name) @tag)
+(inline_tag (tag_name) @tag)
 
-; Common built-in tag names
-(tag_open (tag_name) @tag.builtin
-  (#match? @tag.builtin "^(callout|code|link|note|if|else|include)$"))
-(tag_close (tag_name) @tag.builtin
-  (#match? @tag.builtin "^(callout|code|link|note|if|else|include)$"))
-(tag_self_close (tag_name) @tag.builtin
-  (#match? @tag.builtin "^(callout|code|link|note|if|else|include)$"))
-(inline_tag (tag_name) @tag.builtin
-  (#match? @tag.builtin "^(callout|code|link|note|if|else|include)$"))
+; Markdoc control-flow tags
+[
+  (if_keyword)
+  (else_keyword)
+] @keyword
 
-; Closing tag slash
-("/" @punctuation.delimiter)
+; Inline expression delimiters: {% ... %}
+(inline_expression
+  (inline_expression_open) @punctuation.special
+  (inline_expression_close) @punctuation.special)
 
-; Comment blocks: {% comment %}...{% /comment %}
-(comment_block) @comment
-
-; ============================================================================
-; IF/ELSE CONDITIONAL TAGS
-; ============================================================================
-
-; If tag keywords
-(if_tag_open "if" @keyword.control.conditional)
-(if_tag_close "if" @keyword.control.conditional)
-(else_tag "else" @keyword.control.conditional)
-
-; If tag condition
-(if_tag_open condition: (expression) @embedded)
-(else_tag condition: (expression) @embedded)
-
-
-
-; ============================================================================
-; TAG ATTRIBUTES
-; ============================================================================
-
-; Attribute name (e.g., type, id, class)
-(attribute_name) @attribute
-
-; Shorthand id and class
+; Markdoc attributes and shorthand attributes
+(attribute_name) @property
+(attribute "=" @operator)
 (id_shorthand (shorthand_id) @attribute)
 (class_shorthand (shorthand_class) @attribute)
 
-; Assignment operator
-(attribute ("=" @operator))
+; Annotation delimiters: {% ... %}
+(annotation_block
+  (inline_expression_open) @punctuation.delimiter
+  (inline_expression_close) @punctuation.delimiter)
 
-; Attribute values
-(attribute_value (string) @string)
-; Expressions are injected; still give them a subtle scope
-(attribute_value (expression) @embedded)
+; Annotation key/value highlighting (e.g. {% colspan=2 %})
+(annotation_name) @property
+(annotation_block "=" @operator)
+(annotation_value (identifier) @variable)
 
-; ============================================================================
-; INLINE EXPRESSIONS {{ ... }}
-; ============================================================================
-
-; Expression delimiters
-(inline_expression
-  "{{" @punctuation.bracket
-  "}}" @punctuation.bracket)
-
-; ============================================================================
-; EXPRESSIONS AND OPERATORS
-; ============================================================================
-
-; Variables with $ prefix
+; Variable and expression highlighting
 (variable "$" @punctuation.special)
 (variable (identifier) @variable)
 
-; Identifiers (function names, object keys, etc.)
-(identifier) @variable
+(special_variable "@" @punctuation.special)
+(special_variable (identifier) @variable.special)
 
-; Member expressions: object.property
-(member_expression
-  "." @punctuation.delimiter
-  property: (identifier) @property)
+(variable_reference "." @punctuation.delimiter)
+(variable_reference (identifier) @property)
 
-; Array access: array[index]
-(array_access
-  "[" @punctuation.bracket
-  "]" @punctuation.bracket)
+(special_variable_reference "." @punctuation.delimiter)
+(special_variable_reference (identifier) @property)
 
-; Function calls: func() or obj.method()
-; Highlight identifier as function in direct calls
-(call_expression
-  (identifier) @function)
+(subscript_reference
+  (array_subscript
+    "[" @punctuation.bracket
+    "]" @punctuation.bracket))
 
-; Highlight property as function in member expression calls
-(call_expression
-  (member_expression
-    property: (identifier) @function))
+(call_expression function: (identifier) @function)
+(inline_call_expression function: (function_identifier) @function)
 
-; Arrow functions: () => expr
-(arrow_function
-  "(" @punctuation.bracket
-  ")" @punctuation.bracket
-  "=>" @keyword.operator)
-
-; Arrow function parameters
-(arrow_function (identifier) @variable.parameter)
-
-; ============================================================================
-; OPERATORS
-; ============================================================================
-
-; Binary arithmetic operators
-(binary_add) @operator
-(binary_subtract) @operator
-(binary_multiply) @operator
-(binary_divide) @operator
-(binary_modulo) @operator
-
-; Binary comparison operators
-(binary_equal) @operator
-(binary_not_equal) @operator
-(binary_less_than) @operator
-(binary_greater_than) @operator
-(binary_less_equal) @operator
-(binary_greater_equal) @operator
-
-; Binary logical operators
-(binary_and) @operator
-(binary_or) @operator
-
-; Unary operators
-(unary_not) @operator
-(unary_minus) @operator
-(unary_plus) @operator
-
-; ============================================================================
-; LITERALS
-; ============================================================================
-
-; Strings: "string" or 'string'
 (string) @string
-
-; Numbers: 42, 3.14, -10
 (number) @number
-
-; Booleans: true, false
 (boolean) @boolean
-
-; Null
 (null) @constant.builtin
 
-; ============================================================================
-; DATA STRUCTURES
-; ============================================================================
-
-; Array literals: [1, 2, 3]
-(array_literal
-  "[" @punctuation.bracket
-  "]" @punctuation.bracket)
-
-; Object literals: { key: value }
-(object_literal
-  "{" @punctuation.bracket
-  "}" @punctuation.bracket)
-
-; Object pairs - key: value
-; First child is the key (identifier)
-(pair
-  (identifier) @property
-  ":" @punctuation.delimiter)
-
-; Commas in arrays and objects
-(array_literal "," @punctuation.delimiter)
-(object_literal "," @punctuation.delimiter)
-(call_expression "," @punctuation.delimiter)
-
-; ============================================================================
-; TEXT CONTENT
-; ============================================================================
-
-; Plain text in paragraphs and lists
-(text) @none
-(list_paragraph (text) @none)
-
-; ============================================================================
-; PARENTHESES AND BRACKETS (GENERIC)
-; ============================================================================
-
-; Function call parentheses
-(call_expression
-  "(" @punctuation.bracket
-  ")" @punctuation.bracket)
+(pair key: (identifier) @property)
+(pair key: (string) @property)
+(pair ":" @punctuation.delimiter)

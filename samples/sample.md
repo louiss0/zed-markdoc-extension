@@ -24,7 +24,7 @@ def hello():
 
 ### Markdoc Variables (won't highlight by default)
 
-User: {{ $user.name }}
+User: {{ $user.name %}
 
 {% callout type="warning" %}
 To enable Markdoc highlighting for .md files, add file type configuration to Zed settings.

@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "dependencies": {
+    "@markdoc/language-server": "0.0.13"
+  }
+}
