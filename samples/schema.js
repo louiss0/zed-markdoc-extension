@@ -63,7 +63,6 @@ module.exports = {
       },
     },
     "orbit-menu": {
-      render: "OrbitMenu",
       description: "A block tag for menus designed under unusual constraints.",
       attributes: {
         course: {
