@@ -15,6 +15,8 @@ Comprehensive [Markdoc](https://markdoc.dev) language support for the
 - Code fence language injection for embedded syntax highlighting
 - Folding, indentation, and bracket matching
 - Support for Markdoc tags, variables, and attributes
+- Automatic installation and startup of the official Markdoc language server
+- `markdoc.config.json` support for schema-aware completions and validation
 
 ## Installation
 
@@ -49,6 +51,36 @@ After this extension is accepted in the Zed extension registry:
 > registry. Keeping samples and documentation at the repo root lets us exclude
 > them from the Zed submission by pointing the registry to `path = "extension"`
 > (see `PUBLISHING.md`).
+
+## Language Server Setup
+
+This extension starts the official `@markdoc/language-server` package through
+Zed's Rust extension API.
+
+For schema-aware validation, completions, definitions, and routing, add a
+`markdoc.config.json` file at your workspace root. The Markdoc language server
+expects an array of server instances. Example:
+
+```json
+[
+  {
+    "id": "docs",
+    "path": "docs/content",
+    "schema": {
+      "path": "docs/dist/schema.js",
+      "type": "node",
+      "property": "default",
+      "watch": true
+    },
+    "routing": {
+      "frontmatter": "route"
+    }
+  }
+]
+```
+
+Without a `markdoc.config.json`, the server still starts, but it falls back to
+workspace-root defaults and won't have project-specific schema information.
 
 ## Repository Layout
 
