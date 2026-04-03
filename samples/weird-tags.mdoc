@@ -1,0 +1,44 @@
+---
+title: Weird Schema Tags
+author: Mark Syntax
+date: 2026-04-02
+---
+
+# Weird Schema Tags
+
+This sample is intentionally odd. Its only job is to make the Markdoc language
+server see five custom tags that come from the local sample schema.
+
+## Moon Phase
+
+The moon-phase tag behaves like a narrative wrapper for nocturnal release notes.
+It is deliberately theatrical so completions, hover text, and validation have
+something custom to work with.
+
+{% orbit-menu course="dessert" /%}
+
+{% $boo %}
+
+## Spice Radar
+
+{% spice-radar heat="nebula" signal="charred-citrus" /%}
+
+## Glitch Garden
+
+{% glitch-garden mode="soft-chaos" season="monsoon" %}
+The glitch-garden tag is for describing interfaces that should feel alive
+without becoming unreadable. It gives the sample workspace a second block tag
+with different attribute rules than moon-phase.
+{% /glitch-garden %}
+
+## Time Pickle
+
+{% glitch-garden mode="soft-chaos" /%}
+
+## Orbit Menu
+
+{% orbit-menu course="dessert" gravity="low" %}
+- Freeze-dried plum custard
+- Cinnamon vapor shards
+- Toasted sesame dust
+{% /orbit-menu %}

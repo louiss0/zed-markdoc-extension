@@ -92,16 +92,19 @@ impl zed::Extension for MarkdocExtension {
         if let Ok(contents) = worktree.read_text_file(config_path) {
             if let Ok(Value::Array(entries)) = serde_json::from_str::<Value>(&contents) {
                 if let Some(Value::Object(first)) = entries.first().cloned() {
-                    let instance = Value::Object(first);
-                    let path = instance
+                    let path = first
                         .get("path")
                         .and_then(|value| value.as_str())
-                        .unwrap_or(".");
+                        .unwrap_or(".")
+                        .to_string();
+                    let mut config = first;
+                    config.insert("root".into(), Value::String(root.clone()));
+                    config.insert("path".into(), Value::String(path.clone()));
 
                     return Ok(Some(json!({
                         "root": root,
                         "path": path,
-                        "config": instance,
+                        "config": config,
                     })));
                 }
             }

@@ -1,6 +1,11 @@
 [
   {
     "id": "sample-files",
-    "path": "samples"
+    "path": "samples",
+    "schema": {
+      "path": "samples/schema.js",
+      "type": "node",
+      "watch": true
+    }
   }
 ]
